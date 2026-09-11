@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useBuilder } from "@/components/page-builder/BuilderProvider";
+import SectionOverlay from "@/components/page-builder/SectionOverlay";
 
 // ═══════════════════════════════════════════════════════
 // Icon map for CMS-driven icons
@@ -161,6 +163,7 @@ interface HomepageSectionsProps {
 // ═══════════════════════════════════════════════════════
 export default function HomepageSections({ homepage }: HomepageSectionsProps) {
   const hp = homepage || {};
+  const { isEditMode } = useBuilder();
 
   // Stats from CMS or defaults
   const stats = hp.stats && hp.stats.length > 0
@@ -192,6 +195,7 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
   return (
     <>
       {/* ═══════════ Trust Bar ═══════════ */}
+      <SectionOverlay sectionId="stats" label="Trust Bar" icon="📊">
       <section className="trust-bar py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -221,8 +225,10 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </div>
         </div>
       </section>
+      </SectionOverlay>
 
       {/* ═══════════ Product Categories — 3 Brand Cards ═══════════ */}
+      <SectionOverlay sectionId="brands" label="Brands" icon="🏷️">
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -287,8 +293,10 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </div>
         </div>
       </section>
+      </SectionOverlay>
 
       {/* ═══════════ Featured Products ═══════════ */}
+      <SectionOverlay sectionId="products" label="Products" icon="📦">
       <section className="py-20 bg-background-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -340,8 +348,10 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </motion.div>
         </div>
       </section>
+      </SectionOverlay>
 
       {/* ═══════════ Featured Gallery ═══════════ */}
+      <SectionOverlay sectionId="gallery" label="Gallery" icon="🖼️">
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -407,8 +417,10 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </motion.div>
         </div>
       </section>
+      </SectionOverlay>
 
       {/* ═══════════ Why Choose Us ═══════════ */}
+      <SectionOverlay sectionId="whyChooseUs" label="Why Choose Us" icon="✅">
       <section className="py-20 bg-background-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -457,8 +469,10 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </div>
         </div>
       </section>
+      </SectionOverlay>
 
       {/* ═══════════ Testimonials ═══════════ */}
+      <SectionOverlay sectionId="testimonials" label="Testimonials" icon="💬">
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -519,8 +533,10 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </div>
         </div>
       </section>
+      </SectionOverlay>
 
       {/* ═══════════ CTA Section ═══════════ */}
+      <SectionOverlay sectionId="cta" label="CTA" icon="📞">
       <section className="py-24 bg-gradient-to-r from-primary via-primary-dark to-secondary relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-64 h-64 bg-accent rounded-full blur-3xl" />
@@ -564,6 +580,7 @@ export default function HomepageSections({ homepage }: HomepageSectionsProps) {
           </motion.div>
         </div>
       </section>
+      </SectionOverlay>
     </>
   );
 }

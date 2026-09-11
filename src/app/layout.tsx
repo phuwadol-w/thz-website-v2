@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Inter, Kanit } from "next/font/google";
 import "./globals.css";
 import { getSettings } from "@/lib/fetchGlobals";
+import BuilderWrapper from "@/components/page-builder/BuilderWrapper";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -258,7 +259,9 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col antialiased">{children}</body>
+      <body className="min-h-screen flex flex-col antialiased">
+        <BuilderWrapper>{children}</BuilderWrapper>
+      </body>
     </html>
   );
 }
