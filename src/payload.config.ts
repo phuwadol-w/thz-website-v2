@@ -12,6 +12,11 @@ import { Pages } from './collections/Pages'
 import { Submissions } from './collections/Submissions'
 import { Media } from './collections/Media'
 
+import { Settings } from './globals/Settings'
+import { Homepage } from './globals/Homepage'
+import { Navigation } from './globals/Navigation'
+import { FooterConfig } from './globals/Footer'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -33,6 +38,12 @@ export default buildConfig({
     Pages,
     Submissions,
     Media,
+  ],
+  globals: [
+    Settings,
+    Homepage,
+    Navigation,
+    FooterConfig,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'thz-dev-secret-change-in-production',
