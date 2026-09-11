@@ -4,13 +4,7 @@ import Footer from "@/components/Footer";
 import HomepageSections from "@/components/HomepageSections";
 import { getSettings, getHomepage, getNavigation, getFooterConfig } from "@/lib/fetchGlobals";
 
-// ═══════════════════════════════════════════════════════
-// Homepage — Server Component
-// Fetches data from Payload CMS globals, passes to client components
-// ═══════════════════════════════════════════════════════
-
 export default async function HomePage() {
-  // Fetch all CMS data in parallel
   const [settings, homepage, navigation, footerConfig] = await Promise.all([
     getSettings(),
     getHomepage(),
@@ -20,52 +14,48 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen">
-      {/* Navbar — receives navLinks + contact from CMS */}
       <Navbar
         navLinks={navigation?.navLinks?.map((link: any) => ({
-          label: link.label,
-          href: link.href,
+          label: String(link.label || ''),
+          href: String(link.href || ''),
           children: link.children?.map((child: any) => ({
-            label: child.label,
-            href: child.href,
+            label: String(child.label || ''),
+            href: String(child.href || ''),
           })),
         }))}
-        ctaPhone={navigation?.ctaPhone || settings?.phone}
-        ctaFacebook={navigation?.ctaFacebook || settings?.facebook}
+        ctaPhone={String(navigation?.ctaPhone || settings?.phone || '081-300-1932')}
+        ctaFacebook={String(navigation?.ctaFacebook || settings?.facebook || 'https://www.facebook.com/domekarnchang/')}
       />
 
-      {/* Hero — receives hero data from CMS */}
       <Hero
-        badge={homepage?.heroBadge}
-        headline1={homepage?.heroHeadline1}
-        headline2={homepage?.heroHeadline2}
-        headline3={homepage?.heroHeadline3}
-        standard={homepage?.heroStandard}
-        subtext={homepage?.heroSubtext}
-        imageUrl={homepage?.heroImage?.url}
-        ctaText={homepage?.heroCtaText}
-        ctaLink={homepage?.heroCtaLink}
+        badge={String(homepage?.heroBadge || '')}
+        headline1={String(homepage?.heroHeadline1 || 'สนามเด็กเล่น')}
+        headline2={String(homepage?.heroHeadline2 || 'คุณภาพ')}
+        headline3={String(homepage?.heroHeadline3 || 'มาตรฐาน')}
+        standard={String(homepage?.heroStandard || 'มอก.3000')}
+        subtext={String(homepage?.heroSubtext || '')}
+        imageUrl={homepage?.heroImage && typeof homepage.heroImage === 'object' && 'url' in homepage.heroImage ? String(homepage.heroImage.url || '') : undefined}
+        ctaText={String(homepage?.heroCtaText || 'ขอใบเสนอราคาฟรี')}
+        ctaLink={String(homepage?.heroCtaLink || '/contact')}
       />
 
-      {/* All animated sections — Trust Bar, Brands, Products, Gallery, Why, Testimonials, CTA */}
-      <HomepageSections homepage={homepage} />
+      <HomepageSections homepage={homepage as any} />
 
-      {/* Footer — receives footer data from CMS */}
       <Footer
-        description={footerConfig?.description}
+        description={String(footerConfig?.description || '')}
         productLinks={footerConfig?.productLinks?.map((link: any) => ({
-          label: link.label,
-          href: link.href,
+          label: String(link.label || ''),
+          href: String(link.href || ''),
         }))}
         serviceLinks={footerConfig?.serviceLinks?.map((link: any) => ({
-          label: link.label,
+          label: String(link.label || ''),
         }))}
-        copyright={footerConfig?.copyright}
-        madeIn={footerConfig?.madeIn}
-        phone={settings?.phone}
-        email={settings?.email}
-        address={settings?.address}
-        facebook={settings?.facebook}
+        copyright={String(footerConfig?.copyright || '')}
+        madeIn={String(footerConfig?.madeIn || '')}
+        phone={String(settings?.phone || '081-300-1932')}
+        email={String(settings?.email || 'THZ@gmail.com')}
+        address={String(settings?.address || '')}
+        facebook={String(settings?.facebook || '')}
       />
     </main>
   );
