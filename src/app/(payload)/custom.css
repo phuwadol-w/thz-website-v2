@@ -1,0 +1,10 @@
+/* Custom Payload Admin Styles for THZ */
+:root {
+  --payload-primary: #2196F3;
+  --payload-secondary: #4CAF50;
+}
+
+/* Override Payload's default primary color */
+[data-theme="light"] {
+  --payload-default-theme: #2196F3;
+}
