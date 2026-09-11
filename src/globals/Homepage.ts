@@ -6,6 +6,16 @@ export const Homepage: GlobalConfig = {
     group: 'จัดการเว็บไซต์',
   },
   fields: [
+    // ═══ Page Builder — Section Order ═══
+    {
+      name: 'sectionOrder',
+      type: 'json',
+      defaultValue: ['hero', 'stats', 'brands', 'products', 'gallery', 'whyChooseUs', 'testimonials', 'cta'],
+      admin: {
+        description: 'ลำดับของส่วนบนหน้าแรก (จัดการผ่าน Page Builder)',
+        hidden: true,
+      },
+    },
     {
       type: 'tabs',
       tabs: [
