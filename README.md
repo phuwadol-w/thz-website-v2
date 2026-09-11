@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# THZ Website - อุปกรณ์สนามเด็กเล่นคุณภาพ
+
+เว็บไซต์ หจก.โดมการช่าง (THaiCraftworkZ) — ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพมาตรฐาน มอก.3000
 
 ## Getting Started
 
