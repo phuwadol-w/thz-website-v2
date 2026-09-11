@@ -5,7 +5,47 @@ import { ArrowRight, Shield, Truck, Award, Phone } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Hero() {
+// ═══════════════════════════════════════════════════════
+// Types
+// ═══════════════════════════════════════════════════════
+interface HeroProps {
+  badge?: string;
+  headline1?: string;
+  headline2?: string;
+  headline3?: string;
+  standard?: string;
+  subtext?: string;
+  imageUrl?: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+// ═══════════════════════════════════════════════════════
+// Defaults (match current hardcoded values)
+// ═══════════════════════════════════════════════════════
+const defaults = {
+  badge: "EST. 2560 — PLAYGROUND EQUIPMENT",
+  headline1: "สนามเด็กเล่น",
+  headline2: "คุณภาพ",
+  headline3: "มาตรฐาน",
+  standard: "มอก.3000",
+  subtext: "ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพ",
+  imageUrl: "/images/hero/hero-main.jpg",
+  ctaText: "ขอใบเสนอราคาฟรี",
+  ctaLink: "/contact",
+};
+
+export default function Hero(props: HeroProps) {
+  const badge = props.badge || defaults.badge;
+  const headline1 = props.headline1 || defaults.headline1;
+  const headline2 = props.headline2 || defaults.headline2;
+  const headline3 = props.headline3 || defaults.headline3;
+  const standard = props.standard || defaults.standard;
+  const subtext = props.subtext || defaults.subtext;
+  const imageUrl = props.imageUrl || defaults.imageUrl;
+  const ctaText = props.ctaText || defaults.ctaText;
+  const ctaLink = props.ctaLink || defaults.ctaLink;
+
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-sky-light via-white to-grass-light">
       {/* Decorative floating shapes */}
@@ -27,7 +67,7 @@ export default function Hero() {
             >
               <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
               <span className="font-montserrat text-sm text-primary-dark font-semibold">
-                EST. 2560 — PLAYGROUND EQUIPMENT
+                {badge}
               </span>
             </motion.div>
 
@@ -38,13 +78,13 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="font-montserrat text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[0.95] mb-6"
             >
-              <span className="text-text-dark">สนามเด็กเล่น</span>
+              <span className="text-text-dark">{headline1}</span>
               <br />
-              <span className="text-primary">คุณภาพ</span>{" "}
-              <span className="text-accent">มาตรฐาน</span>
+              <span className="text-primary">{headline2}</span>{" "}
+              <span className="text-accent">{headline3}</span>
               <br />
               <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-secondary">
-                มอก.3000
+                {standard}
               </span>
             </motion.h1>
 
@@ -55,7 +95,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="font-inter text-lg md:text-xl text-gray-600 mb-8 max-w-lg leading-relaxed"
             >
-              ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพ
+              {subtext}
               <br />
               <span className="text-text-dark font-medium">โครงเหล็กชุบสังกะสี + พลาสติก LLDPE</span>
               <br />
@@ -70,10 +110,10 @@ export default function Hero() {
               className="flex flex-wrap gap-4 mb-10"
             >
               <Link
-                href="/contact"
+                href={ctaLink}
                 className="group inline-flex items-center gap-3 btn-cta text-base"
               >
-                ขอใบเสนอราคาฟรี
+                {ctaText}
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
@@ -116,7 +156,7 @@ export default function Hero() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
               <Image
-                src="/images/hero/hero-main.jpg"
+                src={imageUrl}
                 alt="สนามเด็กเล่น THZ - อุปกรณ์สนามเด็กเล่นคุณภาพมาตรฐาน มอก.3000"
                 width={600}
                 height={400}
@@ -131,7 +171,7 @@ export default function Hero() {
                   </div>
                   <div>
                     <p className="font-montserrat font-bold text-text-dark">
-                      มอก.3000
+                      {standard}
                     </p>
                     <p className="thai-text text-xs text-gray-600">
                       ผ่านมาตรฐานความปลอดภัย

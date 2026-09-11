@@ -4,21 +4,48 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 
-const productLinks = [
+// ═══════════════════════════════════════════════════════
+// Types
+// ═══════════════════════════════════════════════════════
+interface ProductLink {
+  label: string;
+  href: string;
+}
+
+interface ServiceLink {
+  label: string;
+}
+
+interface FooterProps {
+  description?: string;
+  productLinks?: ProductLink[];
+  serviceLinks?: ServiceLink[];
+  copyright?: string;
+  madeIn?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  facebook?: string;
+}
+
+// ═══════════════════════════════════════════════════════
+// Defaults (match current hardcoded values)
+// ═══════════════════════════════════════════════════════
+const defaultProductLinks: ProductLink[] = [
   { href: "/products?cat=play", label: "THZ Play — สนามเด็กเล่น" },
   { href: "/products?cat=bench", label: "THZ Bench — ม้านั่งโรงเรียน" },
   { href: "/products?cat=furniture", label: "THZ Furniture — เฟอร์นิเจอร์ Loft" },
   { href: "/gallery", label: "ผลงานติดตั้ง" },
 ];
 
-const serviceLinks = [
-  "ออกแบบสนามเด็กเล่น",
-  "ติดตั้งอุปกรณ์",
-  "ซ่อมบำรุงและบริการหลังขาย",
-  "ให้คำปรึกษาฟรี",
+const defaultServiceLinks: ServiceLink[] = [
+  { label: "ออกแบบสนามเด็กเล่น" },
+  { label: "ติดตั้งอุปกรณ์" },
+  { label: "ซ่อมบำรุงและบริการหลังขาย" },
+  { label: "ให้คำปรึกษาฟรี" },
 ];
 
-const provinces = [
+const defaultProvinces = [
   { slug: "nakhon-si-thammarat", name: "นครศรีธรรมราช" },
   { slug: "surat-thani", name: "สุราษฎร์ธานี" },
   { slug: "songkhla", name: "สงขลา" },
@@ -34,7 +61,22 @@ const provinces = [
   { slug: "narathiwat", name: "นราธิวาส" },
 ];
 
-export default function Footer() {
+export default function Footer(props: FooterProps) {
+  const description = props.description ||
+    "หจก.โดมการช่าง ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่น คุณภาพมาตรฐาน มอก.3000 ผลิตในประเทศไทย จัดส่งและติดตั้งทั่วประเทศ";
+  const productLinks = props.productLinks && props.productLinks.length > 0
+    ? props.productLinks
+    : defaultProductLinks;
+  const serviceLinks = props.serviceLinks && props.serviceLinks.length > 0
+    ? props.serviceLinks
+    : defaultServiceLinks;
+  const copyright = props.copyright || "สงวนลิขสิทธิ์";
+  const madeIn = props.madeIn || "ผลิตในประเทศไทย";
+  const phone = props.phone || "081-300-1932";
+  const email = props.email || "THZ@gmail.com";
+  const address = props.address || "44 หมู่ 1 ถนนเทวบุรี ต.โพธิ์เสด็จ อ.เมือง จ.นครศรีธรรมราช 80000";
+  const facebook = props.facebook || "https://www.facebook.com/domekarnchang/";
+
   return (
     <footer className="bg-text-dark text-white relative overflow-hidden">
       {/* Decorative top border - bright colors */}
@@ -67,13 +109,11 @@ export default function Footer() {
               </div>
             </Link>
             <p className="thai-text text-gray-400 text-sm leading-relaxed mb-6">
-              หจก.โดมการช่าง ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่น
-              คุณภาพมาตรฐาน มอก.3000 ผลิตในประเทศไทย
-              จัดส่งและติดตั้งทั่วประเทศ
+              {description}
             </p>
             <div className="flex gap-3">
               <a
-                href="https://www.facebook.com/domekarnchang"
+                href={facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-white/10"
@@ -121,7 +161,7 @@ export default function Footer() {
                 <li key={i}>
                   <span className="thai-text text-sm text-gray-400 flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full bg-accent/50" />
-                    {item}
+                    {item.label}
                   </span>
                 </li>
               ))}
@@ -134,7 +174,7 @@ export default function Footer() {
               บริการทั่วภาคใต้
             </h4>
             <ul className="space-y-2">
-              {provinces.map((province) => (
+              {defaultProvinces.map((province) => (
                 <li key={province.slug}>
                   <Link
                     href={`/areas/${province.slug}`}
@@ -156,7 +196,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="tel:0813001932"
+                  href={`tel:${phone.replace(/-/g, '')}`}
                   className="flex items-start gap-3 group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
@@ -164,7 +204,7 @@ export default function Footer() {
                   </div>
                   <div>
                     <p className="thai-text text-sm text-white font-medium">
-                      081-300-1932
+                      {phone}
                     </p>
                     <p className="thai-text text-xs text-gray-500">
                       โทรเลย
@@ -174,7 +214,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="mailto:THZ@gmail.com"
+                  href={`mailto:${email}`}
                   className="flex items-start gap-3 group"
                 >
                   <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
@@ -182,7 +222,7 @@ export default function Footer() {
                   </div>
                   <div>
                     <p className="thai-text text-sm text-white font-medium">
-                      THZ@gmail.com
+                      {email}
                     </p>
                     <p className="thai-text text-xs text-gray-500">
                       ส่งอีเมล
@@ -210,12 +250,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="thai-text text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} THaiCraftworkZ (THZ) — หจก.โดมการช่าง
-            สงวนลิขสิทธิ์
+            &copy; {new Date().getFullYear()} THaiCraftworkZ (THZ) — หจก.โดมการช่าง {copyright}
           </p>
           <div className="flex items-center gap-4">
             <span className="thai-text text-xs text-gray-600">
-              ผลิตในประเทศไทย
+              {madeIn}
             </span>
           </div>
         </div>

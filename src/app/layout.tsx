@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Inter, Kanit } from "next/font/google";
 import "./globals.css";
+import { getSettings } from "@/lib/fetchGlobals";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -23,77 +24,90 @@ const kanit = Kanit({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "อุปกรณ์สนามเด็กเล่น คุณภาพมาตรฐาน | หจก.โดมการช่าง THZ",
-    template: "%s | THaiCraftworkZ (THZ)",
-  },
-  description:
-    "ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพ โครงเหล็กชุบสังกะสี + พลาสติก LLDPE มาตรฐาน มอก.3000 จัดส่งทั่วประเทศ บริการติดตั้งฟรี ☎️ 081-300-1932",
-  keywords: [
-    "อุปกรณ์สนามเด็กเล่น",
-    "สนามเด็กเล่น",
-    "สไลเดอร์พลาสติก",
-    "ชิงช้าสนาม",
-    "สนามเด็กเล่นพลาสติกกันแดด",
-    "ม้านั่งโรงเรียน",
-    "เฟอร์นิเจอร์ Loft",
-    "THZ",
-    "THaiCraftworkZ",
-    "โดมการช่าง",
-    "นครศรีธรรมราช",
-    "มอก.3000",
-    "อุปกรณ์สนามเด็กเล่น ภาคใต้",
-    "สนามเด็กเล่น นครศรีธรรมราช",
-    "สนามเด็กเล่น สุราษฎร์ธานี",
-    "สนามเด็กเล่น สงขลา",
-    "สนามเด็กเล่น ภูเก็ต",
-  ],
-  authors: [{ name: "หจก.โดมการช่าง" }],
-  creator: "THaiCraftworkZ (THZ)",
-  openGraph: {
-    type: "website",
-    locale: "th_TH",
-    url: "https://www.thz.co.th",
-    siteName: "THaiCraftworkZ (THZ) - อุปกรณ์สนามเด็กเล่น",
-    title: "อุปกรณ์สนามเด็กเล่น คุณภาพมาตรฐาน | หจก.โดมการช่าง THZ",
-    description:
-      "ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพ โครงเหล็กชุบสังกะสี + พลาสติก LLDPE มาตรฐาน มอก.3000 จัดส่งทั่วประเทศ บริการติดตั้งฟรี",
-    images: [
-      {
-        url: "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
-        width: 1200,
-        height: 630,
-        alt: "อุปกรณ์สนามเด็กเล่น THZ - คุณภาพมาตรฐาน มอก.3000",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "อุปกรณ์สนามเด็กเล่น คุณภาพมาตรฐาน | THZ",
-    description:
-      "ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพ มอก.3000 จัดส่งทั่วประเทศ บริการติดตั้งฟรี",
-    images: ["/images/products/726606443_1405968788229183_6337553449482275185_n.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+// ═══════════════════════════════════════════════════════
+// Dynamic metadata from Payload CMS Settings global
+// Falls back to hardcoded defaults if CMS is unavailable
+// ═══════════════════════════════════════════════════════
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+
+  const title = settings?.metaTitle || "อุปกรณ์สนามเด็กเล่น คุณภาพมาตรฐาน | หจก.โดมการช่าง THZ";
+  const description =
+    settings?.metaDescription ||
+    "ผู้ผลิตและจำหน่ายอุปกรณ์สนามเด็กเล่นคุณภาพ โครงเหล็กชุบสังกะสี + พลาสติก LLDPE มาตรฐาน มอก.3000 จัดส่งทั่วประเทศ บริการติดตั้งฟรี ☎️ 081-300-1932";
+  const keywords = settings?.keywords
+    ? settings.keywords.split(",").map((k: string) => k.trim())
+    : [
+        "อุปกรณ์สนามเด็กเล่น",
+        "สนามเด็กเล่น",
+        "สไลเดอร์พลาสติก",
+        "ชิงช้าสนาม",
+        "สนามเด็กเล่นพลาสติกกันแดด",
+        "ม้านั่งโรงเรียน",
+        "เฟอร์นิเจอร์ Loft",
+        "THZ",
+        "THaiCraftworkZ",
+        "โดมการช่าง",
+        "นครศรีธรรมราช",
+        "มอก.3000",
+        "อุปกรณ์สนามเด็กเล่น ภาคใต้",
+        "สนามเด็กเล่น นครศรีธรรมราช",
+        "สนามเด็กเล่น สุราษฎร์ธานี",
+        "สนามเด็กเล่น สงขลา",
+        "สนามเด็กเล่น ภูเก็ต",
+      ];
+
+  return {
+    title: {
+      default: title,
+      template: "%s | THaiCraftworkZ (THZ)",
+    },
+    description,
+    keywords,
+    authors: [{ name: "หจก.โดมการช่าง" }],
+    creator: "THaiCraftworkZ (THZ)",
+    openGraph: {
+      type: "website",
+      locale: "th_TH",
+      url: settings?.website ? `https://${settings.website}` : "https://www.thz.co.th",
+      siteName: "THaiCraftworkZ (THZ) - อุปกรณ์สนามเด็กเล่น",
+      title,
+      description,
+      images: [
+        {
+          url: "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
+          width: 1200,
+          height: 630,
+          alt: "อุปกรณ์สนามเด็กเล่น THZ - คุณภาพมาตรฐาน มอก.3000",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | THZ`,
+      description,
+      images: ["/images/products/726606443_1405968788229183_6337553449482275185_n.jpg"],
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  alternates: {
-    canonical: "https://www.thz.co.th",
-  },
-  verification: {},
-  other: {
-    "schema-org": "LocalBusiness",
-  },
-};
+    alternates: {
+      canonical: settings?.website ? `https://${settings.website}` : "https://www.thz.co.th",
+    },
+    verification: {},
+    other: {
+      "schema-org": "LocalBusiness",
+    },
+  };
+}
 
 export default function RootLayout({
   children,

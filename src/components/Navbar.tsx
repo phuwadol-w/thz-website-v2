@@ -5,7 +5,25 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, Phone, MessageCircle, ChevronDown } from "lucide-react";
 
-const navLinks = [
+// ═══════════════════════════════════════════════════════
+// Types
+// ═══════════════════════════════════════════════════════
+interface NavLink {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+
+interface NavbarProps {
+  navLinks?: NavLink[];
+  ctaPhone?: string;
+  ctaFacebook?: string;
+}
+
+// ═══════════════════════════════════════════════════════
+// Default navigation links (match current hardcoded)
+// ═══════════════════════════════════════════════════════
+const defaultNavLinks: NavLink[] = [
   { href: "/", label: "หน้าแรก" },
   {
     href: "/products",
@@ -21,7 +39,13 @@ const navLinks = [
   { href: "/contact", label: "ติดต่อเรา" },
 ];
 
-export default function Navbar() {
+export default function Navbar(props: NavbarProps) {
+  const navLinks = props.navLinks && props.navLinks.length > 0
+    ? props.navLinks
+    : defaultNavLinks;
+  const ctaPhone = props.ctaPhone || "081-300-1932";
+  const ctaFacebook = props.ctaFacebook || "https://www.facebook.com/domekarnchang/";
+
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredDropdown, setHoveredDropdown] = useState<number | null>(null);
@@ -79,7 +103,7 @@ export default function Navbar() {
                   className="thai-text font-medium px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-1 text-text-dark hover:text-primary hover:bg-primary/5"
                 >
                   {link.label}
-                  {link.children && (
+                  {link.children && link.children.length > 0 && (
                     <ChevronDown
                       size={14}
                       className={`transition-transform duration-300 ${
@@ -90,7 +114,7 @@ export default function Navbar() {
                 </Link>
 
                 {/* Dropdown */}
-                {link.children && hoveredDropdown === index && (
+                {link.children && link.children.length > 0 && hoveredDropdown === index && (
                   <div className="absolute top-full left-0 mt-1 w-64 bg-white rounded-2xl shadow-2xl shadow-black/10 border border-gray-100 py-2 animate-scale-in">
                     {link.children.map((child) => (
                       <Link
@@ -110,14 +134,14 @@ export default function Navbar() {
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="tel:0813001932"
+              href={`tel:${ctaPhone.replace(/-/g, '')}`}
               className="flex items-center gap-2 btn-primary text-sm px-5 py-2.5"
             >
               <Phone size={16} />
-              <span>081-300-1932</span>
+              <span>{ctaPhone}</span>
             </a>
             <a
-              href="https://www.facebook.com/domekarnchang/"
+              href={ctaFacebook}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#1877F2] text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-[#166FE5] transition-all duration-300 shadow-lg shadow-[#1877F2]/20"
@@ -152,7 +176,7 @@ export default function Navbar() {
                 >
                   {link.label}
                 </Link>
-                {link.children && (
+                {link.children && link.children.length > 0 && (
                   <div className="pl-6">
                     {link.children.map((child) => (
                       <Link
@@ -170,14 +194,14 @@ export default function Navbar() {
             ))}
             <div className="pt-4 border-t border-gray-100 flex flex-col gap-3 mt-4">
               <a
-                href="tel:0813001932"
+                href={`tel:${ctaPhone.replace(/-/g, '')}`}
                 className="flex items-center justify-center gap-2 btn-primary text-sm"
               >
                 <Phone size={16} />
-                <span>081-300-1932</span>
+                <span>{ctaPhone}</span>
               </a>
               <a
-                href="https://www.facebook.com/domekarnchang/"
+                href={ctaFacebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-[#1877F2] text-white px-6 py-3 rounded-full text-sm font-semibold"
