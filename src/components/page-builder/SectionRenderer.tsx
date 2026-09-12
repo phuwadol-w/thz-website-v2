@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import Image from "next/image";
 import {
   Shield, Truck, Wrench, Phone, MessageCircle, Star,
   ArrowRight, Award, CheckCircle, Heart, Users,
 } from "lucide-react";
+import InlineEditable, { InlineEditableImage } from "./InlineEditable";
+import { useBuilder } from "./BuilderProvider";
 
 // ═══════════════════════════════════════════════════════
 // Icon map
@@ -106,13 +107,11 @@ export default function SectionRenderer({ sectionId, homepage }: SectionRenderer
 }
 
 // ═══════════════════════════════════════════════════════
-// Individual Section Components
+// HERO SECTION
 // ═══════════════════════════════════════════════════════
-
 function HeroSection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#0d2847] to-[#0a1628]">
-      {/* Background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500 rounded-full blur-[120px]" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500 rounded-full blur-[150px]" />
@@ -120,103 +119,104 @@ function HeroSection({ hp }: { hp: Record<string, any> }) {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left content */}
+          {/* Left content — ALL INLINE EDITABLE */}
           <div>
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-white/80 px-4 py-2 rounded-full text-xs font-montserrat font-semibold tracking-wider mb-6">
-                {hp.heroBadge || "EST. 2560 — PLAYGROUND EQUIPMENT"}
-              </span>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <InlineEditable
+                field="heroBadge"
+                sectionId="hero"
+                defaultValue={hp.heroBadge || "EST. 2560 — PLAYGROUND EQUIPMENT"}
+                tag="span"
+                className="inline-block bg-white/10 backdrop-blur-sm border border-white/20 text-white/80 px-4 py-2 rounded-full text-xs font-montserrat font-semibold tracking-wider mb-6"
+              />
             </motion.div>
 
-            {/* Headlines */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1 }}
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
               className="font-montserrat text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6"
             >
-              {hp.heroHeadline1 || "สนามเด็กเล่น"}
+              <InlineEditable
+                field="heroHeadline1"
+                sectionId="hero"
+                defaultValue={hp.heroHeadline1 || "สนามเด็กเล่น"}
+                tag="span"
+                className="text-white"
+              />
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#F4D03F]">
-                {hp.heroHeadline2 || "คุณภาพ"}
+                <InlineEditable
+                  field="heroHeadline2"
+                  sectionId="hero"
+                  defaultValue={hp.heroHeadline2 || "คุณภาพ"}
+                  tag="span"
+                />
               </span>{" "}
               <span className="text-white">
-                {hp.heroHeadline3 || "มาตรฐาน"}
+                <InlineEditable
+                  field="heroHeadline3"
+                  sectionId="hero"
+                  defaultValue={hp.heroHeadline3 || "มาตรฐาน"}
+                  tag="span"
+                />
               </span>
             </motion.h1>
 
-            {/* Standard badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2.5 mb-6"
             >
               <CheckCircle size={18} className="text-[#D4AF37]" />
-              <span className="font-montserrat font-bold text-white text-sm">
-                {hp.heroStandard || "มอก.3000"}
-              </span>
+              <InlineEditable
+                field="heroStandard"
+                sectionId="hero"
+                defaultValue={hp.heroStandard || "มอก.3000"}
+                tag="span"
+                className="font-montserrat font-bold text-white text-sm"
+              />
             </motion.div>
 
-            {/* Subtext */}
             {hp.heroSubtext && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}
                 className="text-white/70 text-lg mb-8 max-w-lg leading-relaxed"
               >
-                {hp.heroSubtext}
+                <InlineEditable
+                  field="heroSubtext"
+                  sectionId="hero"
+                  defaultValue={hp.heroSubtext}
+                  tag="span"
+                />
               </motion.p>
             )}
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}
               className="flex flex-wrap gap-4"
             >
-              <a
-                href={hp.heroCtaLink || "/contact"}
+              <a href={hp.heroCtaLink || "/contact"}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-[#D4AF37] to-[#F4D03F] text-[#0a1628] px-8 py-4 rounded-full font-montserrat font-bold text-base hover:shadow-lg hover:shadow-[#D4AF37]/30 transition-all duration-300"
               >
-                {hp.heroCtaText || "ขอใบเสนอราคาฟรี"}
+                <InlineEditable
+                  field="heroCtaText"
+                  sectionId="hero"
+                  defaultValue={hp.heroCtaText || "ขอใบเสนอราคาฟรี"}
+                  tag="span"
+                />
                 <ArrowRight size={18} />
               </a>
             </motion.div>
           </div>
 
-          {/* Right — Hero Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          {/* Right — Hero Image — CLICK TO CHANGE */}
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }}
             className="relative"
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/30">
-              {hp.heroImage && typeof hp.heroImage === "object" && hp.heroImage.url ? (
-                <Image
-                  src={String(hp.heroImage.url)}
-                  alt="อุปกรณ์สนามเด็กเล่น THZ"
-                  width={800}
-                  height={600}
-                  className="w-full h-auto object-cover"
-                  priority
-                />
-              ) : (
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#1a365d] to-[#0d2847] flex items-center justify-center">
-                  <div className="text-center text-white/30">
-                    <Shield size={80} className="mx-auto mb-4" />
-                    <p className="font-montserrat text-lg">THaiCraftworkZ</p>
-                  </div>
-                </div>
-              )}
+              <InlineEditableImage
+                field="heroImage"
+                sectionId="hero"
+                src={hp.heroImage?.url || ""}
+                alt="อุปกรณ์สนามเด็กเล่น THZ"
+                width={800}
+                height={600}
+                className="w-full h-auto object-cover"
+              />
             </div>
           </motion.div>
         </div>
@@ -225,6 +225,9 @@ function HeroSection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// STATS SECTION
+// ═══════════════════════════════════════════════════════
 function StatsSection({ hp }: { hp: Record<string, any> }) {
   const stats = hp.stats && hp.stats.length > 0
     ? hp.stats.map((s: any) => ({ ...s, icon: getIcon(s.icon) }))
@@ -237,12 +240,8 @@ function StatsSection({ hp }: { hp: Record<string, any> }) {
           {stats.map((stat: any, index: number) => {
             const IconComp = stat.icon;
             return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
+              <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.1 }}
                 className="flex items-center gap-3 justify-center"
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -250,9 +249,11 @@ function StatsSection({ hp }: { hp: Record<string, any> }) {
                 </div>
                 <div>
                   <p className="font-montserrat font-extrabold text-xl text-text-dark">
-                    {stat.number}
+                    <InlineEditable field={`stats.${index}.number`} sectionId="stats" defaultValue={stat.number} tag="span" />
                   </p>
-                  <p className="thai-text text-xs text-gray-500">{stat.label}</p>
+                  <p className="thai-text text-xs text-gray-500">
+                    <InlineEditable field={`stats.${index}.label`} sectionId="stats" defaultValue={stat.label} tag="span" />
+                  </p>
                 </div>
               </motion.div>
             );
@@ -263,6 +264,9 @@ function StatsSection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// BRANDS SECTION
+// ═══════════════════════════════════════════════════════
 function BrandsSection({ hp }: { hp: Record<string, any> }) {
   const brands = hp.brands && hp.brands.length > 0
     ? hp.brands.map((b: any) => ({
@@ -279,42 +283,35 @@ function BrandsSection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block thai-text bg-primary/10 text-primary px-5 py-2 rounded-full text-sm font-semibold mb-4">
             แบรนด์สินค้าของเรา
           </span>
           <h2 className="font-montserrat text-3xl md:text-4xl font-extrabold text-text-dark mb-4">
-            {hp.brandsTitle || "3 แบรนด์คุณภาพ ครบวงจร"}
+            <InlineEditable field="brandsTitle" sectionId="brands" defaultValue={hp.brandsTitle || "3 แบรนด์คุณภาพ ครบวงจร"} tag="span" />
           </h2>
           <div className="section-divider mt-6" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {brands.map((brand: any, index: number) => (
-            <motion.div
-              key={brand.slug || index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+            <motion.div key={brand.slug || index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-100"
             >
               <div className="relative h-64 overflow-hidden">
-                <Image
+                <InlineEditableImage
+                  field={`brands.${index}.image`}
+                  sectionId="brands"
                   src={brand.image}
                   alt={`${brand.name} - อุปกรณ์สนามเด็กเล่น`}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  width={400}
+                  height={256}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-text-dark/60 to-transparent" />
                 <div className="absolute bottom-4 left-4">
-                  <span
-                    className="inline-block text-white text-xs font-bold px-4 py-1.5 rounded-full"
+                  <span className="inline-block text-white text-xs font-bold px-4 py-1.5 rounded-full"
                     style={{ backgroundColor: brand.color || "#2196F3" }}
                   >
                     {brand.badge}
@@ -323,17 +320,13 @@ function BrandsSection({ hp }: { hp: Record<string, any> }) {
               </div>
               <div className="p-6">
                 <h3 className="font-montserrat font-extrabold text-xl text-text-dark mb-2">
-                  {brand.name}
+                  <InlineEditable field={`brands.${index}.name`} sectionId="brands" defaultValue={brand.name} tag="span" />
                 </h3>
                 <p className="font-inter text-sm text-gray-500 mb-4 leading-relaxed">
-                  {brand.description}
+                  <InlineEditable field={`brands.${index}.description`} sectionId="brands" defaultValue={brand.description} tag="span" />
                 </p>
-                <Link
-                  href={brand.link}
-                  className="inline-flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-3 transition-all duration-300"
-                >
-                  ดูสินค้าทั้งหมด
-                  <ArrowRight size={16} />
+                <Link href={brand.link} className="inline-flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-3 transition-all duration-300">
+                  ดูสินค้าทั้งหมด <ArrowRight size={16} />
                 </Link>
               </div>
             </motion.div>
@@ -344,55 +337,75 @@ function BrandsSection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// PRODUCTS SECTION
+// ═══════════════════════════════════════════════════════
 function ProductsSection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="py-20 bg-background-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block thai-text bg-accent/10 text-accent-dark px-5 py-2 rounded-full text-sm font-semibold mb-4">
-            {hp.productsSubtitle || "สินค้าแนะนำ"}
+            <InlineEditable field="productsSubtitle" sectionId="products" defaultValue={hp.productsSubtitle || "สินค้าแนะนำ"} tag="span" />
           </span>
           <h2 className="font-montserrat text-3xl md:text-4xl font-extrabold text-text-dark mb-4">
-            {hp.productsTitle || "สินค้าขายดีของเรา"}
+            <InlineEditable field="productsTitle" sectionId="products" defaultValue={hp.productsTitle || "สินค้าขายดีของเรา"} tag="span" />
           </h2>
           <p className="thai-text text-gray-500 max-w-2xl mx-auto">
-            {hp.productsDescription ||
-              "ผลิตจากวัสดุคุณภาพสูง โครงเหล็กชุบสังกะสี + พลาสติก LLDPE ทนทาน ปลอดภัย ได้มาตรฐาน มอก.3000"}
+            <InlineEditable field="productsDescription" sectionId="products"
+              defaultValue={hp.productsDescription || "ผลิตจากวัสดุคุณภาพสูง โครงเหล็กชุบสังกะสี + พลาสติก LLDPE ทนทาน ปลอดภัย ได้มาตรฐาน มอก.3000"}
+              tag="span"
+            />
           </p>
           <div className="section-divider mt-6" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {defaultProducts.map((product, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
             >
-              <ProductCard {...product} />
+              {/* Product image — click to change */}
+              <div className="relative h-56 overflow-hidden">
+                <InlineEditableImage
+                  field={`products.${index}.image`}
+                  sectionId="products"
+                  src={product.image}
+                  alt={`${product.title} - อุปกรณ์สนามเด็กเล่น THZ`}
+                  width={400}
+                  height={224}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                {product.badge && (
+                  <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    {product.badge}
+                  </span>
+                )}
+                <span className="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full text-white"
+                  style={{ backgroundColor: product.accentColor }}
+                >
+                  {product.category}
+                </span>
+              </div>
+              <div className="p-5">
+                <h3 className="font-montserrat font-bold text-text-dark mb-2 text-lg">
+                  <InlineEditable field={`products.${index}.title`} sectionId="products" defaultValue={product.title} tag="span" />
+                </h3>
+                <p className="thai-text text-sm text-gray-500 leading-relaxed mb-4">
+                  <InlineEditable field={`products.${index}.description`} sectionId="products" defaultValue={product.description} tag="span" />
+                </p>
+                <Link href="/products" className="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all">
+                  ดูรายละเอียด <ArrowRight size={16} />
+                </Link>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-12"
-        >
-          <Link
-            href="/products"
-            className="btn-primary inline-flex items-center gap-2"
-          >
-            ดูสินค้าทั้งหมด
-            <ArrowRight size={18} />
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-12">
+          <Link href="/products" className="btn-primary inline-flex items-center gap-2">
+            ดูสินค้าทั้งหมด <ArrowRight size={18} />
           </Link>
         </motion.div>
       </div>
@@ -400,21 +413,19 @@ function ProductsSection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// GALLERY SECTION
+// ═══════════════════════════════════════════════════════
 function GallerySection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block thai-text bg-secondary/10 text-secondary px-5 py-2 rounded-full text-sm font-semibold mb-4">
-            {hp.gallerySubtitle || "ผลงานของเรา"}
+            <InlineEditable field="gallerySubtitle" sectionId="gallery" defaultValue={hp.gallerySubtitle || "ผลงานของเรา"} tag="span" />
           </span>
           <h2 className="font-montserrat text-3xl md:text-4xl font-extrabold text-text-dark mb-4">
-            {hp.galleryTitle || "ผลงานติดตั้งทั่วประเทศ"}
+            <InlineEditable field="galleryTitle" sectionId="gallery" defaultValue={hp.galleryTitle || "ผลงานติดตั้งทั่วประเทศ"} tag="span" />
           </h2>
           <p className="thai-text text-gray-500 max-w-2xl mx-auto">
             ผลงานการผลิตและติดตั้งอุปกรณ์สนามเด็กเล่นกว่า 500 โครงการ
@@ -424,17 +435,17 @@ function GallerySection({ hp }: { hp: Record<string, any> }) {
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {defaultGalleryItems.map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              className="gallery-card aspect-square cursor-pointer"
+            <motion.div key={index} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="gallery-card aspect-square cursor-pointer group"
             >
-              <img
+              <InlineEditableImage
+                field={`gallery.${index}.image`}
+                sectionId="gallery"
                 src={item.image}
                 alt={`${item.location} - อุปกรณ์สนามเด็กเล่น THZ`}
+                width={400}
+                height={400}
                 className="w-full h-full object-cover"
               />
               <div className="overlay flex items-end p-5">
@@ -443,7 +454,7 @@ function GallerySection({ hp }: { hp: Record<string, any> }) {
                     {item.category}
                   </span>
                   <h3 className="thai-text text-white font-semibold text-sm md:text-base">
-                    {item.location}
+                    <InlineEditable field={`gallery.${index}.location`} sectionId="gallery" defaultValue={item.location} tag="span" />
                   </h3>
                 </div>
               </div>
@@ -451,18 +462,9 @@ function GallerySection({ hp }: { hp: Record<string, any> }) {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-10"
-        >
-          <Link
-            href="/gallery"
-            className="btn-primary inline-flex items-center gap-2"
-          >
-            ดูผลงานทั้งหมด
-            <ArrowRight size={18} />
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-10">
+          <Link href="/gallery" className="btn-primary inline-flex items-center gap-2">
+            ดูผลงานทั้งหมด <ArrowRight size={18} />
           </Link>
         </motion.div>
       </div>
@@ -470,6 +472,9 @@ function GallerySection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// WHY CHOOSE US SECTION
+// ═══════════════════════════════════════════════════════
 function WhyChooseUsSection({ hp }: { hp: Record<string, any> }) {
   const whyItems = hp.whyItems && hp.whyItems.length > 0
     ? hp.whyItems.map((w: any) => ({ ...w, icon: getIcon(w.icon) }))
@@ -478,17 +483,12 @@ function WhyChooseUsSection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="py-20 bg-background-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block thai-text bg-primary/10 text-primary px-5 py-2 rounded-full text-sm font-semibold mb-4">
-            {hp.whySubtitle || "ทำไมต้อง THZ"}
+            <InlineEditable field="whySubtitle" sectionId="whyChooseUs" defaultValue={hp.whySubtitle || "ทำไมต้อง THZ"} tag="span" />
           </span>
           <h2 className="font-montserrat text-3xl md:text-4xl font-extrabold text-text-dark mb-4">
-            {hp.whyTitle || "คุณภาพระดับโลก ราคาที่เข้าถึงได้"}
+            <InlineEditable field="whyTitle" sectionId="whyChooseUs" defaultValue={hp.whyTitle || "คุณภาพระดับโลก ราคาที่เข้าถึงได้"} tag="span" />
           </h2>
           <p className="thai-text text-gray-500 max-w-2xl mx-auto">
             หจก.โดมการช่าง ผลิตอุปกรณ์สนามเด็กเล่นด้วยวัสดุคุณภาพสูง
@@ -501,22 +501,18 @@ function WhyChooseUsSection({ hp }: { hp: Record<string, any> }) {
           {whyItems.map((item: any, index: number) => {
             const IconComp = item.icon;
             return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+              <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 card-hover text-center"
               >
                 <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-5">
                   <IconComp size={28} className="text-primary" />
                 </div>
                 <h3 className="font-montserrat font-bold text-text-dark mb-3">
-                  {item.title}
+                  <InlineEditable field={`whyItems.${index}.title`} sectionId="whyChooseUs" defaultValue={item.title} tag="span" />
                 </h3>
                 <p className="thai-text text-sm text-gray-500 leading-relaxed">
-                  {item.description}
+                  <InlineEditable field={`whyItems.${index}.description`} sectionId="whyChooseUs" defaultValue={item.description} tag="span" />
                 </p>
               </motion.div>
             );
@@ -527,6 +523,9 @@ function WhyChooseUsSection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// TESTIMONIALS SECTION
+// ═══════════════════════════════════════════════════════
 function TestimonialsSection({ hp }: { hp: Record<string, any> }) {
   const testimonials = hp.testimonials && hp.testimonials.length > 0
     ? hp.testimonials
@@ -535,29 +534,20 @@ function TestimonialsSection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block thai-text bg-secondary/10 text-secondary px-5 py-2 rounded-full text-sm font-semibold mb-4">
             ความคิดเห็นลูกค้า
           </span>
           <h2 className="font-montserrat text-3xl md:text-4xl font-extrabold text-text-dark mb-4">
-            {hp.testimonialsTitle || "ลูกค้าของเราไว้วางใจ"}
+            <InlineEditable field="testimonialsTitle" sectionId="testimonials" defaultValue={hp.testimonialsTitle || "ลูกค้าของเราไว้วางใจ"} tag="span" />
           </h2>
           <div className="section-divider mt-6" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial: any, index: number) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+            <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
             >
               <div className="flex gap-1 mb-4">
@@ -566,7 +556,7 @@ function TestimonialsSection({ hp }: { hp: Record<string, any> }) {
                 ))}
               </div>
               <p className="thai-text text-gray-600 mb-6 leading-relaxed">
-                &ldquo;{testimonial.text}&rdquo;
+                &ldquo;<InlineEditable field={`testimonials.${index}.text`} sectionId="testimonials" defaultValue={testimonial.text} tag="span" />&rdquo;
               </p>
               <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -576,10 +566,10 @@ function TestimonialsSection({ hp }: { hp: Record<string, any> }) {
                 </div>
                 <div>
                   <p className="font-montserrat font-semibold text-text-dark text-sm">
-                    {testimonial.name}
+                    <InlineEditable field={`testimonials.${index}.name`} sectionId="testimonials" defaultValue={testimonial.name} tag="span" />
                   </p>
                   <p className="thai-text text-xs text-gray-500">
-                    {testimonial.role}
+                    <InlineEditable field={`testimonials.${index}.role`} sectionId="testimonials" defaultValue={testimonial.role} tag="span" />
                   </p>
                 </div>
               </div>
@@ -591,6 +581,9 @@ function TestimonialsSection({ hp }: { hp: Record<string, any> }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════
+// CTA SECTION
+// ═══════════════════════════════════════════════════════
 function CTASection({ hp }: { hp: Record<string, any> }) {
   return (
     <section className="py-24 bg-gradient-to-r from-primary via-primary-dark to-secondary relative overflow-hidden">
@@ -600,33 +593,27 @@ function CTASection({ hp }: { hp: Record<string, any> }) {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <h2 className="font-montserrat text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
-            {hp.ctaTitle || "พร้อมสร้างสนามเด็กเล่น"}
+            <InlineEditable field="ctaTitle" sectionId="cta" defaultValue={hp.ctaTitle || "พร้อมสร้างสนามเด็กเล่น"} tag="span" />
             <br />
-            <span className="text-accent">{hp.ctaSubtitle || "ในฝัน ของคุณ?"}</span>
+            <span className="text-accent">
+              <InlineEditable field="ctaSubtitle" sectionId="cta" defaultValue={hp.ctaSubtitle || "ในฝัน ของคุณ?"} tag="span" />
+            </span>
           </h2>
           <p className="thai-text text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-            {hp.ctaDescription ||
-              "ติดต่อเราวันนี้เพื่อรับใบเสนอราคาฟรี ออกแบบและติดตั้งอุปกรณ์สนามเด็กเล่นคุณภาพมาตรฐาน จัดส่งทั่วประเทศ"}
+            <InlineEditable field="ctaDescription" sectionId="cta"
+              defaultValue={hp.ctaDescription || "ติดต่อเราวันนี้เพื่อรับใบเสนอราคาฟรี ออกแบบและติดตั้งอุปกรณ์สนามเด็กเล่นคุณภาพมาตรฐาน จัดส่งทั่วประเทศ"}
+              tag="span"
+            />
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href="tel:0813001932"
-              className="btn-accent inline-flex items-center gap-2 text-base"
-            >
+            <a href="tel:0813001932" className="btn-accent inline-flex items-center gap-2 text-base">
               <Phone size={20} />
-              {hp.ctaPhoneText || "โทรเลย 081-300-1932"}
+              <InlineEditable field="ctaPhoneText" sectionId="cta" defaultValue={hp.ctaPhoneText || "โทรเลย 081-300-1932"} tag="span" />
             </a>
-            <a
-              href="https://line.me/ti/p/@THZ"
-              target="_blank"
-              rel="noopener noreferrer"
+            <a href="https://line.me/ti/p/@THZ" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#06C755] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#05b34a] transition-all duration-300 shadow-lg shadow-[#06C755]/30"
             >
               <MessageCircle size={20} />

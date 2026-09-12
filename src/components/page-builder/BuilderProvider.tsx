@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 
 // ═══════════════════════════════════════════════════════
 // Types
@@ -35,6 +35,10 @@ interface BuilderContextType extends BuilderState {
   toggleSidebar: () => void;
   pendingChanges: Record<string, Record<string, unknown>>;
   addPendingChange: (sectionId: string, data: Record<string, unknown>) => void;
+  homepageData: Record<string, any>;
+  navigationData: Record<string, any>;
+  footerData: Record<string, any>;
+  settingsData: Record<string, any>;
 }
 
 const BuilderContext = createContext<BuilderContextType | null>(null);
@@ -69,9 +73,37 @@ const DEFAULT_SECTION_ORDER = [
 ];
 
 // ═══════════════════════════════════════════════════════
+// Helper: Extract Payload CMS global data
+// Payload globals return the object directly (no docs array)
+// ═══════════════════════════════════════════════════════
+function extractPayloadData(response: any): Record<string, any> {
+  if (!response) return {};
+  // Payload CMS globals return data directly
+  // Collections return { docs: [...], totalDocs: N }
+  if (response.docs && Array.isArray(response.docs)) {
+    return response.docs[0] || {};
+  }
+  if (response.doc) {
+    return response.doc;
+  }
+  // Direct global data
+  return response;
+}
+
+// ═══════════════════════════════════════════════════════
 // Provider Component
 // ═══════════════════════════════════════════════════════
-export function BuilderProvider({ children }: { children: ReactNode }) {
+interface BuilderProviderProps {
+  children: ReactNode;
+  initialData?: {
+    homepage?: any;
+    navigation?: any;
+    footerConfig?: any;
+    settings?: any;
+  };
+}
+
+export function BuilderProvider({ children, initialData }: BuilderProviderProps) {
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -80,6 +112,32 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  // Data from CMS
+  const [homepageData, setHomepageData] = useState<Record<string, any>>({});
+  const [navigationData, setNavigationData] = useState<Record<string, any>>({});
+  const [footerData, setFooterData] = useState<Record<string, any>>({});
+  const [settingsData, setSettingsData] = useState<Record<string, any>>({});
+
+  // Initialize from initialData
+  useEffect(() => {
+    if (initialData?.homepage) {
+      const hp = extractPayloadData(initialData.homepage);
+      setHomepageData(hp);
+      if (hp.sectionOrder && Array.isArray(hp.sectionOrder)) {
+        setSectionOrderState(hp.sectionOrder);
+      }
+    }
+    if (initialData?.navigation) {
+      setNavigationData(extractPayloadData(initialData.navigation));
+    }
+    if (initialData?.footerConfig) {
+      setFooterData(extractPayloadData(initialData.footerConfig));
+    }
+    if (initialData?.settings) {
+      setSettingsData(extractPayloadData(initialData.settings));
+    }
+  }, [initialData]);
 
   // Section order for drag-and-drop reordering
   const [sectionOrder, setSectionOrderState] = useState<string[]>(DEFAULT_SECTION_ORDER);
@@ -312,6 +370,10 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     toggleSidebar,
     pendingChanges,
     addPendingChange,
+    homepageData,
+    navigationData,
+    footerData,
+    settingsData,
   };
 
   return (

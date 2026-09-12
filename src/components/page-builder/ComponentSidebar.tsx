@@ -18,7 +18,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   GripVertical,
   Eye,
@@ -30,7 +30,7 @@ import {
   Layout,
   Trash2,
 } from "lucide-react";
-import { useBuilder, SECTION_GLOBAL_MAP } from "./BuilderProvider";
+import { useBuilder } from "./BuilderProvider";
 import { SECTION_CONFIGS } from "./builder-configs";
 
 // ═══════════════════════════════════════════════════════
@@ -67,7 +67,7 @@ function SortableSectionItem({
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    zIndex: isDragging ? 9999 : "auto" as string | number,
+    zIndex: isDragging ? 9999 : ("auto" as string | number),
   };
 
   if (!config) return null;
@@ -82,7 +82,6 @@ function SortableSectionItem({
           : "hover:bg-gray-50 border border-transparent"
       } ${isDragging ? "shadow-xl ring-2 ring-blue-400" : ""}`}
     >
-      {/* Drag handle */}
       <button
         {...attributes}
         {...listeners}
@@ -91,10 +90,8 @@ function SortableSectionItem({
         <GripVertical size={16} />
       </button>
 
-      {/* Section icon */}
       <span className="text-lg flex-shrink-0">{config.icon}</span>
 
-      {/* Section label */}
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-800 truncate">
           {config.label.split("—")[0].trim()}
@@ -106,9 +103,7 @@ function SortableSectionItem({
         )}
       </div>
 
-      {/* Actions */}
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        {/* Visibility toggle */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -124,7 +119,6 @@ function SortableSectionItem({
           {isVisible ? <Eye size={14} /> : <EyeOff size={14} />}
         </button>
 
-        {/* Edit button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -136,12 +130,15 @@ function SortableSectionItem({
           <Pencil size={14} />
         </button>
 
-        {/* Delete button */}
         {!["hero", "cta"].includes(sectionId) && (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              if (confirm(`ต้องการลบ "${config.label.split("—")[0].trim()}" ออกหรือไม่?`)) {
+              if (
+                confirm(
+                  `ต้องการลบ "${config.label.split("—")[0].trim()}" ออกหรือไม่?`
+                )
+              ) {
                 removeSection(sectionId);
               }
             }}
@@ -157,7 +154,8 @@ function SortableSectionItem({
 }
 
 // ═══════════════════════════════════════════════════════
-// Main Sidebar Component
+// Main Sidebar Component — renders content only (no positioning)
+// Positioning handled by parent (VisualBuilder)
 // ═══════════════════════════════════════════════════════
 export default function ComponentSidebar() {
   const {
@@ -175,14 +173,13 @@ export default function ComponentSidebar() {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 5 },
+      activationConstraint: { distance: 3 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
-  // Handle drag end — reorder sections
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
@@ -195,7 +192,6 @@ export default function ComponentSidebar() {
     }
   }
 
-  // Sections available to add (not currently in the list)
   const availableSections = Object.keys(SECTION_CONFIGS).filter(
     (id) => !sectionOrder.includes(id)
   );
@@ -203,16 +199,8 @@ export default function ComponentSidebar() {
   if (!isEditMode) return null;
 
   return (
-    <motion.div
-      initial={{ x: -300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -300, opacity: 0 }}
-      transition={{ type: "spring", damping: 25, stiffness: 200 }}
-      className={`fixed top-12 left-0 bottom-0 z-[9990] bg-white border-r border-gray-200 shadow-xl shadow-black/5 flex flex-col transition-all duration-300 ${
-        sidebarCollapsed ? "w-16" : "w-72"
-      }`}
-    >
-      {/* ═══ Header ═══ */}
+    <div className={`h-full bg-white border-r border-gray-200 shadow-xl flex flex-col ${sidebarCollapsed ? "w-16" : "w-72"}`}>
+      {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-gray-50/50">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-2">
@@ -226,11 +214,15 @@ export default function ComponentSidebar() {
           onClick={toggleSidebar}
           className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors text-gray-500"
         >
-          {sidebarCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {sidebarCollapsed ? (
+            <ChevronRight size={16} />
+          ) : (
+            <ChevronLeft size={16} />
+          )}
         </button>
       </div>
 
-      {/* ═══ Section List ═══ */}
+      {/* Section List */}
       {!sidebarCollapsed && (
         <div className="flex-1 overflow-y-auto px-3 py-3">
           <p className="text-xs text-gray-400 mb-3 px-1">
@@ -258,7 +250,7 @@ export default function ComponentSidebar() {
             </SortableContext>
           </DndContext>
 
-          {/* ═══ Add Section ═══ */}
+          {/* Add Section */}
           {availableSections.length > 0 && (
             <div className="mt-4 pt-4 border-t border-gray-100">
               <button
@@ -301,7 +293,7 @@ export default function ComponentSidebar() {
         </div>
       )}
 
-      {/* ═══ Collapsed Icons ═══ */}
+      {/* Collapsed Icons */}
       {sidebarCollapsed && (
         <div className="flex-1 overflow-y-auto py-3 space-y-1 px-2">
           {sectionOrder.map((sectionId) => {
@@ -313,9 +305,7 @@ export default function ComponentSidebar() {
                 key={sectionId}
                 onClick={() => selectSection(sectionId)}
                 className={`w-full p-2 rounded-lg text-center transition-colors ${
-                  isVisible
-                    ? "hover:bg-gray-100"
-                    : "opacity-30 hover:bg-gray-100"
+                  isVisible ? "hover:bg-gray-100" : "opacity-30 hover:bg-gray-100"
                 }`}
                 title={config.label}
               >
@@ -326,7 +316,7 @@ export default function ComponentSidebar() {
         </div>
       )}
 
-      {/* ═══ Footer ═══ */}
+      {/* Footer */}
       {!sidebarCollapsed && (
         <div className="px-4 py-3 border-t border-gray-100 bg-gray-50/50">
           <p className="text-xs text-gray-400 text-center">
@@ -334,6 +324,6 @@ export default function ComponentSidebar() {
           </p>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Save, Loader2, ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { X, Save, Loader2, ChevronDown, ChevronUp, Plus, Trash2, PanelRightClose } from "lucide-react";
 import { useBuilder } from "./BuilderProvider";
 import { SECTION_CONFIGS, FieldConfig } from "./builder-configs";
 import ImageUploader from "./ImageUploader";
@@ -15,7 +15,7 @@ interface EditSidebarProps {
 }
 
 // ═══════════════════════════════════════════════════════
-// Component
+// Component — Floating right sidebar for editing sections
 // ═══════════════════════════════════════════════════════
 export default function EditSidebar({ currentData }: EditSidebarProps) {
   const {
@@ -25,7 +25,6 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
     isSaving,
     saveSection,
     markDirty,
-    showToast,
   } = useBuilder();
 
   const [formData, setFormData] = useState<Record<string, unknown>>({});
@@ -57,7 +56,9 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
   const handleArrayItemChange = useCallback(
     (arrayName: string, index: number, fieldName: string, value: unknown) => {
       setFormData((prev) => {
-        const arr = Array.isArray(prev[arrayName]) ? [...(prev[arrayName] as Record<string, unknown>[])] : [];
+        const arr = Array.isArray(prev[arrayName])
+          ? [...(prev[arrayName] as Record<string, unknown>[])]
+          : [];
         if (arr[index]) {
           arr[index] = { ...arr[index], [fieldName]: value };
         }
@@ -72,7 +73,9 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
   const addArrayItem = useCallback(
     (arrayName: string, template: Record<string, unknown>) => {
       setFormData((prev) => {
-        const arr = Array.isArray(prev[arrayName]) ? [...(prev[arrayName] as Record<string, unknown>[])] : [];
+        const arr = Array.isArray(prev[arrayName])
+          ? [...(prev[arrayName] as Record<string, unknown>[])]
+          : [];
         arr.push({ ...template });
         return { ...prev, [arrayName]: arr };
       });
@@ -85,7 +88,9 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
   const removeArrayItem = useCallback(
     (arrayName: string, index: number) => {
       setFormData((prev) => {
-        const arr = Array.isArray(prev[arrayName]) ? [...(prev[arrayName] as Record<string, unknown>[])] : [];
+        const arr = Array.isArray(prev[arrayName])
+          ? [...(prev[arrayName] as Record<string, unknown>[])]
+          : [];
         arr.splice(index, 1);
         return { ...prev, [arrayName]: arr };
       });
@@ -102,16 +107,20 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
   // Save handler
   const handleSave = async () => {
     if (!selectedSection) return;
-    const success = await saveSection(selectedSection, formData);
-    if (success) {
-      // Keep sidebar open after save
-    }
+    await saveSection(selectedSection, formData);
   };
 
   // Array field templates
   const ARRAY_TEMPLATES: Record<string, Record<string, unknown>> = {
     stats: { number: "", label: "", icon: "Award" },
-    brands: { name: "", slug: "", description: "", image: "", color: "#2196F3", link: "" },
+    brands: {
+      name: "",
+      slug: "",
+      description: "",
+      image: "",
+      color: "#2196F3",
+      link: "",
+    },
     whyItems: { title: "", description: "", icon: "Shield" },
     testimonials: { name: "", role: "", text: "", rating: 5 },
     navLinks: { label: "", href: "", children: [] },
@@ -153,9 +162,7 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
       { name: "label", label: "ชื่อลิงก์", type: "text", path: "" },
       { name: "href", label: "URL", type: "text", path: "" },
     ],
-    serviceLinks: [
-      { name: "label", label: "ชื่อบริการ", type: "text", path: "" },
-    ],
+    serviceLinks: [{ name: "label", label: "ชื่อบริการ", type: "text", path: "" }],
   };
 
   if (!config) return null;
@@ -170,16 +177,16 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeSidebar}
-            className="fixed inset-0 bg-black/30 z-[9997] backdrop-blur-sm"
+            className="fixed inset-0 bg-black/20 z-[9998] backdrop-blur-[1px]"
           />
 
-          {/* Sidebar */}
+          {/* Right Sidebar */}
           <motion.div
-            initial={{ x: -400 }}
+            initial={{ x: 400 }}
             animate={{ x: 0 }}
-            exit={{ x: -400 }}
+            exit={{ x: 400 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-12 left-0 bottom-0 w-[380px] bg-white z-[9998] shadow-2xl shadow-black/20 flex flex-col"
+            className="fixed top-14 right-0 bottom-0 w-[400px] bg-white z-[9999] shadow-2xl shadow-black/20 flex flex-col"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-gray-50">
@@ -189,16 +196,14 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
                   <h3 className="font-montserrat font-bold text-sm text-gray-800">
                     แก้ไข {config.label}
                   </h3>
-                  <p className="text-xs text-gray-500">
-                    {config.fields.length} ฟิลด์
-                  </p>
+                  <p className="text-xs text-gray-500">{config.fields.length} ฟิลด์</p>
                 </div>
               </div>
               <button
                 onClick={closeSidebar}
-                className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors text-gray-500"
+                className="p-2 rounded-lg hover:bg-gray-200 transition-colors text-gray-500"
               >
-                <X size={18} />
+                <PanelRightClose size={18} />
               </button>
             </div>
 
@@ -245,7 +250,9 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
                       <input
                         type="number"
                         value={Number(formData[field.name]) || 0}
-                        onChange={(e) => handleFieldChange(field.name, Number(e.target.value))}
+                        onChange={(e) =>
+                          handleFieldChange(field.name, Number(e.target.value))
+                        }
                         className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all"
                       />
                     </div>
@@ -259,7 +266,9 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
                           ? typeof formData[field.name] === "object" &&
                             formData[field.name] !== null &&
                             "url" in (formData[field.name] as Record<string, unknown>)
-                            ? String((formData[field.name] as Record<string, unknown>).url)
+                            ? String(
+                                (formData[field.name] as Record<string, unknown>).url
+                              )
                             : String(formData[field.name])
                           : undefined
                       }
@@ -271,7 +280,6 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
                   {/* Array field */}
                   {field.type === "array" && (
                     <div className="border border-gray-200 rounded-xl overflow-hidden">
-                      {/* Array header */}
                       <button
                         onClick={() => toggleArrayExpand(field.name)}
                         className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors"
@@ -293,106 +301,104 @@ export default function EditSidebar({ currentData }: EditSidebarProps) {
                         </div>
                       </button>
 
-                      {/* Array content */}
                       {expandedArrays[field.name] && (
                         <div className="p-3 space-y-3 bg-white">
                           {Array.isArray(formData[field.name]) &&
-                            (formData[field.name] as Record<string, unknown>[]).map(
-                              (item, index) => {
-                                const subFields = ARRAY_SUBFIELDS[field.name] || [];
-                                return (
-                                  <div
-                                    key={index}
-                                    className="border border-gray-100 rounded-lg p-3 space-y-2 relative group"
-                                  >
-                                    <div className="flex items-center justify-between mb-2">
-                                      <span className="text-xs font-medium text-gray-500">
-                                        #{index + 1}
-                                      </span>
-                                      <button
-                                        onClick={() => removeArrayItem(field.name, index)}
-                                        className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-600 transition-all"
-                                      >
-                                        <Trash2 size={14} />
-                                      </button>
-                                    </div>
-
-                                    {subFields.map((subField) => (
-                                      <div key={subField.name}>
-                                        {subField.type === "text" && (
-                                          <input
-                                            type="text"
-                                            value={String(item[subField.name] || "")}
-                                            onChange={(e) =>
-                                              handleArrayItemChange(
-                                                field.name,
-                                                index,
-                                                subField.name,
-                                                e.target.value
-                                              )
-                                            }
-                                            placeholder={subField.label}
-                                            className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all"
-                                          />
-                                        )}
-                                        {subField.type === "textarea" && (
-                                          <textarea
-                                            value={String(item[subField.name] || "")}
-                                            onChange={(e) =>
-                                              handleArrayItemChange(
-                                                field.name,
-                                                index,
-                                                subField.name,
-                                                e.target.value
-                                              )
-                                            }
-                                            placeholder={subField.label}
-                                            rows={2}
-                                            className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all resize-none"
-                                          />
-                                        )}
-                                        {subField.type === "number" && (
-                                          <input
-                                            type="number"
-                                            value={Number(item[subField.name]) || 0}
-                                            onChange={(e) =>
-                                              handleArrayItemChange(
-                                                field.name,
-                                                index,
-                                                subField.name,
-                                                Number(e.target.value)
-                                              )
-                                            }
-                                            placeholder={subField.label}
-                                            className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all"
-                                          />
-                                        )}
-                                        {subField.type === "image" && (
-                                          <ImageUploader
-                                            currentImage={
-                                              item[subField.name]
-                                                ? String(item[subField.name])
-                                                : undefined
-                                            }
-                                            onImageChange={(url) =>
-                                              handleArrayItemChange(
-                                                field.name,
-                                                index,
-                                                subField.name,
-                                                url
-                                              )
-                                            }
-                                            label={subField.label}
-                                          />
-                                        )}
-                                      </div>
-                                    ))}
+                            (
+                              formData[field.name] as Record<string, unknown>[]
+                            ).map((item, index) => {
+                              const subFields = ARRAY_SUBFIELDS[field.name] || [];
+                              return (
+                                <div
+                                  key={index}
+                                  className="border border-gray-100 rounded-lg p-3 space-y-2 relative group"
+                                >
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-xs font-medium text-gray-500">
+                                      #{index + 1}
+                                    </span>
+                                    <button
+                                      onClick={() => removeArrayItem(field.name, index)}
+                                      className="opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-600 transition-all"
+                                    >
+                                      <Trash2 size={14} />
+                                    </button>
                                   </div>
-                                );
-                              }
-                            )}
 
-                          {/* Add button */}
+                                  {subFields.map((subField) => (
+                                    <div key={subField.name}>
+                                      {subField.type === "text" && (
+                                        <input
+                                          type="text"
+                                          value={String(item[subField.name] || "")}
+                                          onChange={(e) =>
+                                            handleArrayItemChange(
+                                              field.name,
+                                              index,
+                                              subField.name,
+                                              e.target.value
+                                            )
+                                          }
+                                          placeholder={subField.label}
+                                          className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all"
+                                        />
+                                      )}
+                                      {subField.type === "textarea" && (
+                                        <textarea
+                                          value={String(item[subField.name] || "")}
+                                          onChange={(e) =>
+                                            handleArrayItemChange(
+                                              field.name,
+                                              index,
+                                              subField.name,
+                                              e.target.value
+                                            )
+                                          }
+                                          placeholder={subField.label}
+                                          rows={2}
+                                          className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all resize-none"
+                                        />
+                                      )}
+                                      {subField.type === "number" && (
+                                        <input
+                                          type="number"
+                                          value={Number(item[subField.name]) || 0}
+                                          onChange={(e) =>
+                                            handleArrayItemChange(
+                                              field.name,
+                                              index,
+                                              subField.name,
+                                              Number(e.target.value)
+                                            )
+                                          }
+                                          placeholder={subField.label}
+                                          className="w-full px-2.5 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#1a73e8]/30 focus:border-[#1a73e8] transition-all"
+                                        />
+                                      )}
+                                      {subField.type === "image" && (
+                                        <ImageUploader
+                                          currentImage={
+                                            item[subField.name]
+                                              ? String(item[subField.name])
+                                              : undefined
+                                          }
+                                          onImageChange={(url) =>
+                                            handleArrayItemChange(
+                                              field.name,
+                                              index,
+                                              subField.name,
+                                              url
+                                            )
+                                          }
+                                          label={subField.label}
+                                        />
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              );
+                            })}
+
                           <button
                             onClick={() =>
                               addArrayItem(

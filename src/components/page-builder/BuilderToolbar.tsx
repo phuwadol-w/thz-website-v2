@@ -47,8 +47,11 @@ export default function BuilderToolbar() {
         const res = await fetch("/api/users/me");
         if (res.ok) {
           const data = await res.json();
-          setUser(data.user || data);
-          setIsAdmin(data.user?.role === "admin" || data.role === "admin");
+          // Payload CMS /api/users/me returns { user: { ... } } or just { ... }
+          const userData = data.user || data;
+          setUser(userData);
+          // Role is lowercase 'admin' as defined in Users collection
+          setIsAdmin(userData?.role === "admin");
         }
       } catch {
         // Not logged in

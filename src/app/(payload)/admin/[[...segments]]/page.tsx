@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import config from '@payload-config'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
 import { importMap } from '../importMap'
-import VisualBuilder from '@/components/page-builder/VisualBuilder'
+import AdminBuilderWrapper from '@/components/page-builder/AdminBuilderWrapper'
 
 // ═══════════════════════════════════════════════════════
 // Visual Builder — renders at /admin (root, no segments)
@@ -27,9 +27,9 @@ export const generateMetadata = ({ params, searchParams }: Args): Promise<Metada
 async function AdminPage({ params, searchParams }: Args) {
   const resolvedParams = await params
 
-  // If no segments — show the Visual Page Builder
+  // If no segments — show the Visual Page Builder (wrapped in BuilderProvider)
   if (!resolvedParams.segments || resolvedParams.segments.length === 0) {
-    return <VisualBuilder />
+    return <AdminBuilderWrapper />
   }
 
   // Otherwise — show the default Payload CMS admin
