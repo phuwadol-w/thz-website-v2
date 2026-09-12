@@ -3,11 +3,14 @@ import type { Metadata } from 'next'
 import config from '@payload-config'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
 import { importMap } from '../importMap'
-import AdminBuilderWrapper from '@/components/page-builder/AdminBuilderWrapper'
+import PuckEditor from '@/app/(payload)/admin/editor/page'
 
 // ═══════════════════════════════════════════════════════
-// Visual Builder — renders at /admin (root, no segments)
-// Payload CMS admin — renders at /admin/collections/* etc.
+// Admin Route Handler
+// /admin → Payload root
+// /admin/editor → Puck Editor
+// /admin/collections/* → Payload CMS admin
+// /admin/globals/* → Payload CMS admin
 // ═══════════════════════════════════════════════════════
 
 type Args = {
@@ -22,17 +25,16 @@ type Args = {
 export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
   generatePageMetadata({ config, params, searchParams })
 
-// When segments is empty (i.e., /admin root) → render Visual Builder
-// When segments has values (e.g., /admin/collections/products) → render Payload admin
 async function AdminPage({ params, searchParams }: Args) {
   const resolvedParams = await params
+  const segments = resolvedParams.segments || []
 
-  // If no segments — show the Visual Page Builder (wrapped in BuilderProvider)
-  if (!resolvedParams.segments || resolvedParams.segments.length === 0) {
-    return <AdminBuilderWrapper />
+  // /admin/editor → Puck Editor
+  if (segments.length === 1 && segments[0] === 'editor') {
+    return <PuckEditor />
   }
 
-  // Otherwise — show the default Payload CMS admin
+  // /admin/collections/*, /admin/globals/*, /admin → Payload CMS admin
   return RootPage({ config, params, searchParams, importMap })
 }
 
