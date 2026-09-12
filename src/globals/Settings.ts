@@ -18,6 +18,49 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'ธีม & สี',
+          fields: [
+            {
+              name: 'template',
+              type: 'select',
+              defaultValue: 'modern',
+              options: [
+                { label: 'Modern Teal', value: 'modern' },
+                { label: 'Classic Blue', value: 'classic' },
+                { label: 'Minimal White', value: 'minimal' },
+                { label: 'Bold Orange', value: 'bold' },
+                { label: 'Nature Green', value: 'nature' },
+              ],
+              admin: { description: 'เทมเพลตหลักของเว็บไซต์' },
+            },
+            { name: 'primaryColor', type: 'text', defaultValue: '#006D6F', admin: { description: 'สีหลัก (Primary)' } },
+            { name: 'secondaryColor', type: 'text', defaultValue: '#2D6A4F', admin: { description: 'สีรอง (Secondary)' } },
+            { name: 'accentColor', type: 'text', defaultValue: '#D4AF37', admin: { description: 'สีเน้น (Accent)' } },
+            { name: 'bgColor', type: 'text', defaultValue: '#FFFFFF', admin: { description: 'สีพื้นหลัง' } },
+            { name: 'textColor', type: 'text', defaultValue: '#1A1A2E', admin: { description: 'สีข้อความ' } },
+            {
+              name: 'fontPrimary',
+              type: 'select',
+              defaultValue: 'Montserrat',
+              options: [
+                { label: 'Montserrat', value: 'Montserrat' },
+                { label: 'Inter', value: 'Inter' },
+                { label: 'Kanit', value: 'Kanit' },
+                { label: 'Sarabun', value: 'Sarabun' },
+              ],
+              admin: { description: 'ฟอนต์หลัก' },
+            },
+          ],
+        },
+        {
+          label: 'Banner',
+          fields: [
+            { name: 'bannerEnabled', type: 'checkbox', defaultValue: true, admin: { description: 'เปิด/ปิด Banner หน้าแรก' } },
+            { name: 'bannerImage', type: 'upload', relationTo: 'media', admin: { description: 'รูป Banner' } },
+            { name: 'bannerLink', type: 'text', admin: { description: 'ลิงก์เมื่อกด Banner' } },
+          ],
+        },
+        {
           label: 'ติดต่อ',
           fields: [
             { name: 'phone', type: 'text', defaultValue: '081-300-1932' },
@@ -33,6 +76,7 @@ export const Settings: GlobalConfig = {
             { name: 'metaTitle', type: 'text' },
             { name: 'metaDescription', type: 'textarea' },
             { name: 'keywords', type: 'textarea' },
+            { name: 'ogImage', type: 'upload', relationTo: 'media', admin: { description: 'รูป OG Image สำหรับ Social Share' } },
           ],
         },
       ],
