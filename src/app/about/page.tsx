@@ -1,11 +1,7 @@
 import { getPageBySlug } from '@/lib/puck/fetchPages'
 import PuckRenderer from '@/components/PuckRenderer'
+import InlinePuckEditor from '@/components/InlinePuckEditor'
 import AboutPageClient from './AboutPageClient'
-
-// ═══════════════════════════════════════════════════════
-// About Page — Server Component
-// Checks DB for Puck layout first, falls back to hardcoded
-// ═══════════════════════════════════════════════════════
 
 export const metadata = {
   title: 'เกี่ยวกับเรา | THaiCraftworkZ',
@@ -16,11 +12,17 @@ export default async function AboutPage() {
   const page = await getPageBySlug('/about')
   const layout = (page as any)?.layout
 
-  // If Puck layout exists and has content, render it
   if (layout && layout.content && layout.content.length > 0) {
-    return <PuckRenderer layout={layout} />
+    return (
+      <InlinePuckEditor slug="/about" initialLayout={layout}>
+        <PuckRenderer layout={layout} />
+      </InlinePuckEditor>
+    )
   }
 
-  // Fallback to hardcoded client component
-  return <AboutPageClient />
+  return (
+    <InlinePuckEditor slug="/about" initialLayout={{ content: [], root: {}, zones: {} }}>
+      <AboutPageClient />
+    </InlinePuckEditor>
+  )
 }

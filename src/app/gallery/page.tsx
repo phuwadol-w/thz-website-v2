@@ -1,5 +1,6 @@
 import { getPageBySlug } from '@/lib/puck/fetchPages'
 import PuckRenderer from '@/components/PuckRenderer'
+import InlinePuckEditor from '@/components/InlinePuckEditor'
 import GalleryPageClient from './GalleryPageClient'
 
 export const metadata = {
@@ -12,8 +13,16 @@ export default async function GalleryPage() {
   const layout = (page as any)?.layout
 
   if (layout && layout.content && layout.content.length > 0) {
-    return <PuckRenderer layout={layout} />
+    return (
+      <InlinePuckEditor slug="/gallery" initialLayout={layout}>
+        <PuckRenderer layout={layout} />
+      </InlinePuckEditor>
+    )
   }
 
-  return <GalleryPageClient />
+  return (
+    <InlinePuckEditor slug="/gallery" initialLayout={{ content: [], root: {}, zones: {} }}>
+      <GalleryPageClient />
+    </InlinePuckEditor>
+  )
 }

@@ -1,5 +1,6 @@
 import { getPageBySlug } from '@/lib/puck/fetchPages'
 import PuckRenderer from '@/components/PuckRenderer'
+import InlinePuckEditor from '@/components/InlinePuckEditor'
 import ContactPageClient from './ContactPageClient'
 
 export const metadata = {
@@ -12,8 +13,16 @@ export default async function ContactPage() {
   const layout = (page as any)?.layout
 
   if (layout && layout.content && layout.content.length > 0) {
-    return <PuckRenderer layout={layout} />
+    return (
+      <InlinePuckEditor slug="/contact" initialLayout={layout}>
+        <PuckRenderer layout={layout} />
+      </InlinePuckEditor>
+    )
   }
 
-  return <ContactPageClient />
+  return (
+    <InlinePuckEditor slug="/contact" initialLayout={{ content: [], root: {}, zones: {} }}>
+      <ContactPageClient />
+    </InlinePuckEditor>
+  )
 }
