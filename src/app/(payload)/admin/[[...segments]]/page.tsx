@@ -4,11 +4,13 @@ import config from '@payload-config'
 import { RootPage, generatePageMetadata } from '@payloadcms/next/views'
 import { importMap } from '../importMap'
 import PuckEditor from '@/app/(payload)/admin/editor/page'
+import AdminBuilderPage from '@/app/(payload)/admin/builder/page'
 
 // ═══════════════════════════════════════════════════════
 // Admin Route Handler
 // /admin → Payload root
-// /admin/editor → Puck Editor
+// /admin/builder → GrapesJS Visual Builder
+// /admin/editor → Puck Editor (legacy)
 // /admin/collections/* → Payload CMS admin
 // /admin/globals/* → Payload CMS admin
 // ═══════════════════════════════════════════════════════
@@ -29,7 +31,12 @@ async function AdminPage({ params, searchParams }: Args) {
   const resolvedParams = await params
   const segments = resolvedParams.segments || []
 
-  // /admin/editor → Puck Editor
+  // /admin/builder → GrapesJS Visual Builder
+  if (segments.length === 1 && segments[0] === 'builder') {
+    return <AdminBuilderPage />
+  }
+
+  // /admin/editor → Puck Editor (legacy)
   if (segments.length === 1 && segments[0] === 'editor') {
     return <PuckEditor />
   }
