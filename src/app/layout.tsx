@@ -4,7 +4,6 @@ import "./globals.css";
 import { getSettings } from "@/lib/fetchGlobals";
 import BuilderWrapper from "@/components/page-builder/BuilderWrapper";
 import { EditProvider } from "@/lib/puck/EditContext";
-import AdminToolbar from "@/components/AdminToolbar";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -264,7 +263,6 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col antialiased">
         <EditProvider>
           <BuilderWrapper>{children}</BuilderWrapper>
-          <AdminToolbar />
         </EditProvider>
       </body>
     </html>
