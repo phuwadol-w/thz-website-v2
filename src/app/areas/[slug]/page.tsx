@@ -45,6 +45,40 @@ export async function generateMetadata({
       `สไลเดอร์ ${province.name}`,
       `ชิงช้า ${province.name}`,
       `ม้านั่งโรงเรียน ${province.name}`,
+      `สนามเด็กเล่นราคาถูก ${province.name}`,
+      `สนามเด็กเล่นคุณภาพ ${province.name}`,
+      `สนามเด็กเล่นมาตรฐาน ${province.name}`,
+      `สนามเด็กเล่นปลอดภัย ${province.name}`,
+      `ผลิตสนามเด็กเล่น ${province.name}`,
+      `ขายสนามเด็กเล่น ${province.name}`,
+      `ออกแบบสนามเด็กเล่น ${province.name}`,
+      `สนามเด็กเล่นกลางแจ้ง ${province.name}`,
+      `สนามเด็กเล่นพลาสติก ${province.name}`,
+      `สนามเด็กเล่นเหล็ก ${province.name}`,
+      `สนามเด็กเล่นเด็กอนุบาล ${province.name}`,
+      `สนามเด็กเล่นโรงเรียน ${province.name}`,
+      `สนามเด็กเล่นหมู่บ้าน ${province.name}`,
+      `สนามเด็กเล่นคอนโด ${province.name}`,
+      `สนามเด็กเล่นโรงแรม ${province.name}`,
+      `สนามเด็กเล่นรีสอร์ท ${province.name}`,
+      `สนามเด็กเล่นสวนสาธารณะ ${province.name}`,
+      `สนามเด็กเล่นเทศบาล ${province.name}`,
+      `สนามเด็กเล่น อบต. ${province.name}`,
+      `สไลเดอร์ ${province.name}`,
+      `ชิงช้าสนาม ${province.name}`,
+      `ม้านั่งสนาม ${province.name}`,
+      `เฟอร์นิเจอร์เหล็ก ${province.name}`,
+      `เฟอร์นิเจอร์ Loft ${province.name}`,
+      `โต๊ะเก้าอี้โรงเรียน ${province.name}`,
+      `มอก.3000 ${province.name}`,
+      `อุปกรณ์สนามเด็กเล่น ภาคใต้`,
+      `สนามเด็กเล่น ภาคใต้`,
+      `ผู้ผลิตสนามเด็กเล่น ${province.name}`,
+      `โรงงานสนามเด็กเล่น ${province.name}`,
+      `รับทำสนามเด็กเล่น ${province.name}`,
+      `สนามเด็กเล่นรับประกัน ${province.name}`,
+      `สนามเด็กเล่นจัดส่งฟรี ${province.name}`,
+      `สนามเด็กเล่นติดตั้งฟรี ${province.name}`,
     ],
   };
 }
@@ -170,6 +204,11 @@ export default async function ProvincePage({
                     <> รวมถึง {province.nearbyAreas.join(" ")}</>
                   )}
                 </p>
+                <p>
+                  นอกจากอุปกรณ์สนามเด็กเล่น เรายังมีบริการอื่นๆ เช่น
+                  ม้านั่งโรงเรียน เฟอร์นิเจอร์ลอฟ โต๊ะเก้าอี้โรงเรียน
+                  รับสั่งทำตามแบบ ตามขนาด ตามงบประมาณ
+                </p>
               </div>
 
               {/* Products in this province */}
@@ -279,6 +318,52 @@ export default async function ProvincePage({
                         </Link>
                       </li>
                     ))}
+                </ul>
+                <Link
+                  href="/areas"
+                  className="mt-4 flex items-center gap-2 text-primary text-sm font-semibold hover:text-primary-dark transition-colors"
+                >
+                  ดูทุกจังหวัดที่ให้บริการ
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+
+              {/* Products links */}
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 mt-8">
+                <h3 className="font-montserrat font-bold text-text-dark mb-4">
+                  สินค้าที่ให้บริการ
+                </h3>
+                <ul className="space-y-3">
+                  <li>
+                    <Link
+                      href="/products/thz-play"
+                      className="thai-text text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
+                      อุปกรณ์สนามเด็กเล่น THZ Play
+                      <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/products/thz-bench"
+                      className="thai-text text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
+                      ม้านั่งโรงเรียน THZ Bench
+                      <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/products/thz-furniture"
+                      className="thai-text text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-2 group"
+                    >
+                      <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
+                      เฟอร์นิเจอร์ลอฟ THZ Furniture
+                      <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
