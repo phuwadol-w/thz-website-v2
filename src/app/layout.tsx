@@ -71,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "website",
       locale: "th_TH",
-      url: settings?.website ? `https://${settings.website}` : "https://www.thz.co.th",
+      url: "https://thz-website-v2.vercel.app",
       siteName: "THaiCraftworkZ (THZ) - อุปกรณ์สนามเด็กเล่น",
       title,
       description,
@@ -102,7 +102,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     alternates: {
-      canonical: settings?.website ? `https://${settings.website}` : "https://www.thz.co.th",
+      canonical: "https://thz-website-v2.vercel.app",
     },
     verification: {},
     other: {
@@ -123,7 +123,7 @@ export default function RootLayout({
     >
       <head>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="theme-color" content="#2196F3" />
+        <meta name="theme-color" content="#006D6F" />
         {/* Schema.org LocalBusiness */}
         <script
           type="application/ld+json"
