@@ -171,21 +171,27 @@ export default function Footer(props: FooterProps) {
           {/* Province SEO Links */}
           <div className="lg:col-span-3">
             <h4 className="font-montserrat font-bold text-white mb-6 text-sm uppercase tracking-wider">
-              บริการทั่วภาคใต้
+              พื้นที่ให้บริการ
             </h4>
             <ul className="space-y-2">
-              {defaultProvinces.map((province) => (
+              {defaultProvinces.slice(0, 7).map((province) => (
                 <li key={province.slug}>
                   <Link
                     href={`/areas/${province.slug}`}
                     className="thai-text text-sm text-gray-400 hover:text-secondary transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 rounded-full bg-secondary/50 group-hover:bg-secondary transition-colors" />
-                    อุปกรณ์สนามเด็กเล่น {province.name}
+                    {province.name}
                   </Link>
                 </li>
               ))}
             </ul>
+            <Link
+              href="/areas"
+              className="mt-4 inline-flex items-center gap-2 text-secondary text-sm font-semibold hover:text-secondary/80 transition-colors"
+            >
+              ดูทุกจังหวัดที่ให้บริการ →
+            </Link>
           </div>
 
           {/* Contact */}

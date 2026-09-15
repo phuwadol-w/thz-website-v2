@@ -4,16 +4,207 @@ import { provinces, getProvinceBySlug } from "@/lib/provinces";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { Phone, MapPin, Shield, Truck, Award, ArrowRight, MessageCircle } from "lucide-react";
+import { Phone, MapPin, Shield, Truck, Award, ArrowRight, MessageCircle, CheckCircle, Star, Clock } from "lucide-react";
 
-// Generate static params for all provinces
+// Province images mapping - real installation photos
+const provinceImages: Record<string, { installation: string[]; products: string[] }> = {
+  "nakhon-si-thammarat": {
+    installation: [
+      "/images/products/473722342_3859970144244733_1267727839239141879_n.jpg",
+      "/images/products/473742288_3859970147578066_4753978466273187158_n.jpg",
+      "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
+      "/images/products/769309563_1449583230534405_8478278305857454543_n.jpg",
+    ],
+    products: [
+      "/images/products/124374999_2742818269293265_2851804580300417570_n.jpg",
+      "/images/products/472772789_3852975844944163_5782975775520749990_n.jpg",
+      "/images/products/650721761_1321150026711060_532668979833544120_n.jpg",
+    ],
+  },
+  "surat-thani": {
+    installation: [
+      "/images/products/481072543_1171214081676927_1346842185356984644_n.jpg",
+      "/images/products/481073773_1026006139558785_2396254565893924653_n.jpg",
+      "/images/products/481132735_1171214018343600_8522940847613013636_n.jpg",
+      "/images/products/481144859_1171213948343607_2472710232179154173_n.jpg",
+    ],
+    products: [
+      "/images/products/124374999_2742818269293265_2851804580300417570_n.jpg",
+      "/images/products/481262010_1171213998343602_4209543818352889602_n.jpg",
+      "/images/products/486169413_1040308148128584_3212787970872577123_n.jpg",
+    ],
+  },
+  "songkhla": {
+    installation: [
+      "/images/products/124374999_2742818269293265_2851804580300417570_n.jpg",
+      "/images/products/124782093_2741704996071259_58094902225414694_n.jpg",
+      "/images/products/124838954_2741704876071271_4716111895763280532_n.jpg",
+      "/images/products/124839113_2741704969404595_3048744863636296996_n.jpg",
+    ],
+    products: [
+      "/images/products/125030763_2741705106071248_6169510735474174283_n.jpg",
+      "/images/products/125185838_2742818289293263_7180592319727997288_n.jpg",
+      "/images/products/125223894_2742818295959929_7338954461890207654_n.jpg",
+    ],
+  },
+  "phuket": {
+    installation: [
+      "/images/products/650721761_1321150026711060_532668979833544120_n.jpg",
+      "/images/products/486169413_1040308148128584_3212787970872577123_n.jpg",
+      "/images/products/481262010_1171213998343602_4209543818352889602_n.jpg",
+      "/images/products/481265070_1171214001676935_8516482559786430676_n.jpg",
+    ],
+    products: [
+      "/images/products/480810171_1020124503480282_8951267677983846832_n.jpg",
+      "/images/products/481195895_1021032890056110_1148219317793916146_n.jpg",
+      "/images/products/481208015_1021032613389471_8358362979348232040_n.jpg",
+    ],
+  },
+  "krabi": {
+    installation: [
+      "/images/products/472772789_3852975844944163_5782975775520749990_n.jpg",
+      "/images/products/472973828_3852975854944162_1295451813594355416_n.jpg",
+      "/images/products/473069018_3852975938277487_1586752797642414569_n.jpg",
+      "/images/products/473566054_3858215024420245_3741806486544438858_n.jpg",
+    ],
+    products: [
+      "/images/products/124411819_2741704822737943_1029391881544600295_n.jpg",
+      "/images/products/124839113_2741704969404595_3048744863636296996_n.jpg",
+      "/images/products/481072543_1171214081676927_1346842185356984644_n.jpg",
+    ],
+  },
+  "chumphon": {
+    installation: [
+      "/images/products/480810171_1020124503480282_8951267677983846832_n.jpg",
+      "/images/products/480819385_1021034926722573_5530719093716867474_n.jpg",
+      "/images/products/480847505_1022037619955637_6531711096495971983_n.jpg",
+      "/images/products/480951831_1021032680056131_2582530911444144758_n.jpg",
+    ],
+    products: [
+      "/images/products/481045453_3895805183994562_8622605332744103999_n.jpg",
+      "/images/products/481183383_3887604108148003_1473181569421912161_n.jpg",
+      "/images/products/481704544_1025232799636119_4804760732142165980_n.jpg",
+    ],
+  },
+  "ranong": {
+    installation: [
+      "/images/products/481195895_1021032890056110_1148219317793916146_n.jpg",
+      "/images/products/481208015_1021032613389471_8358362979348232040_n.jpg",
+      "/images/products/481220890_1171214215010247_7612389365820312085_n.jpg",
+      "/images/products/481280442_1171214015010267_2075137896484013894_n.jpg",
+    ],
+    products: [
+      "/images/products/481456677_1022017363290996_1891033869727128662_n.jpg",
+      "/images/products/481473257_1025997472892985_9174762777043777122_n.jpg",
+      "/images/products/481509300_1022026189956780_6079562964947164593_n.jpg",
+    ],
+  },
+  "phang-nga": {
+    installation: [
+      "/images/products/652320449_1326700969489299_5670640098706853679_n.jpg",
+      "/images/products/653716266_1326701032822626_4200657426143021090_n.jpg",
+      "/images/products/653839757_1325909172901812_6851414429459484925_n.jpg",
+      "/images/products/657536838_1334306325395430_1402579082283666534_n.jpg",
+    ],
+    products: [
+      "/images/products/657857154_1330971532395576_8136343634028400432_n.jpg",
+      "/images/products/658028044_1336720938487302_7478923359449818325_n.jpg",
+      "/images/products/658142471_1331824338976962_1583640452499622819_n.jpg",
+    ],
+  },
+  "trang": {
+    installation: [
+      "/images/products/655012724_1326701062822623_7114424685328189895_n.jpg",
+      "/images/products/656017573_1329272592565470_513478976908395589_n.jpg",
+      "/images/products/656959813_1330064319152964_4514484620650011695_n.jpg",
+      "/images/products/657350648_1336720898487306_5318407258991268187_n.jpg",
+    ],
+    products: [
+      "/images/products/658416613_1336721021820627_3791989274417213626_n.jpg",
+      "/images/products/659005002_1335893701903359_6175897359389643713_n.jpg",
+      "/images/products/660308507_1336720881820641_839949113169364857_n.jpg",
+    ],
+  },
+  "satun": {
+    installation: [
+      "/images/products/663255111_1341510071341722_3679425143221483642_n.jpg",
+      "/images/products/663259197_1341510101341719_8037926028050811332_n.jpg",
+      "/images/products/663342485_1342223691270360_6175117029909381468_n.jpg",
+      "/images/products/665844395_1340162144809848_6993046331278821837_n.jpg",
+    ],
+    products: [
+      "/images/products/666043465_1341510064675056_8357493482244581242_n.jpg",
+      "/images/products/666351669_1340741398085256_6884761212882356086_n.jpg",
+      "/images/products/666469412_1340162204809842_7037002523101396322_n.jpg",
+    ],
+  },
+  "pattani": {
+    installation: [
+      "/images/products/668138084_1340741368085259_4838382229884132118_n.jpg",
+      "/images/products/668291803_1340741404751922_7730343894183645000_n.jpg",
+      "/images/products/668447947_1343753761117353_4816887290650354029_n.jpg",
+      "/images/products/668523955_1343075731185156_1033976244790146187_n.jpg",
+    ],
+    products: [
+      "/images/products/668776317_1340741361418593_5556019605326953196_n.jpg",
+      "/images/products/669043970_1343075747851821_2734602861982744717_n.jpg",
+      "/images/products/669303839_1341510111341718_3286144536448425734_n.jpg",
+    ],
+  },
+  "yala": {
+    installation: [
+      "/images/products/669043970_1343075747851821_2734602861982744717_n.jpg",
+      "/images/products/669303839_1341510111341718_3286144536448425734_n.jpg",
+      "/images/products/688846358_1363606189132110_2712887141066737004_n.jpg",
+      "/images/products/689707601_1365966032229459_4042542650368142057_n.jpg",
+    ],
+    products: [
+      "/images/products/695398001_1369439638548765_502410126914098700_n.jpg",
+      "/images/products/696262638_1369439688548760_7096633484510823609_n.jpg",
+      "/images/products/697398973_1369439715215424_7415965992255178581_n.jpg",
+    ],
+  },
+  "narathiwat": {
+    installation: [
+      "/images/products/694719190_1366909368801792_2569808972367764351_n.jpg",
+      "/images/products/695398001_1369439638548765_502410126914098700_n.jpg",
+      "/images/products/696262638_1369439688548760_7096633484510823609_n.jpg",
+      "/images/products/697398973_1369439715215424_7415965992255178581_n.jpg",
+    ],
+    products: [
+      "/images/products/698572896_1370314771794585_2980503794702984483_n.jpg",
+      "/images/products/699097028_1369439618548767_7938112552218009017_n.jpg",
+      "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
+    ],
+  },
+};
+
+const defaultImages = {
+  installation: [
+    "/images/products/473722342_3859970144244733_1267727839239141879_n.jpg",
+    "/images/products/473742288_3859970147578066_4753978466273187158_n.jpg",
+    "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
+    "/images/products/769309563_1449583230534405_8478278305857454543_n.jpg",
+  ],
+  products: [
+    "/images/products/124374999_2742818269293265_2851804580300417570_n.jpg",
+    "/images/products/472772789_3852975844944163_5782975775520749990_n.jpg",
+    "/images/products/650721761_1321150026711060_532668979833544120_n.jpg",
+  ],
+};
+
+const testimonials = [
+  { name: "โรงเรียนเทศบาลวัดใหม่", location: "นครศรีธรรมราช", text: "สนามเด็กเล่นคุณภาพมาก แข็งแรง ทนทาน เด็กๆ ชอบมากครับ ทีมงานติดตั้งเรียบร้อย บริการดีมาก", rating: 5 },
+  { name: "อบต.เกาะสมุย", location: "สุราษฎร์ธานี", text: "สั่งชุดเครื่องเล่นรวม 3 ชุด คุณภาพดีมาก สีสันสดใส ได้มาตรฐานจริงๆ จัดส่งเร็วมากครับ", rating: 5 },
+  { name: "โรงเรียนบ้านหาดใหญ่", location: "สงขลา", text: "ม้านั่งโรงเรียนแข็งแรงมาก ใช้มา 2 ปีแล้วยังเหมือนใหม่ ราคาคุ้มค่ามาก แนะนำเลยครับ", rating: 5 },
+];
+
 export async function generateStaticParams() {
   return provinces.map((province) => ({
     slug: province.slug,
   }));
 }
 
-// Generate metadata for each province page
 export async function generateMetadata({
   params,
 }: {
@@ -95,7 +286,8 @@ export default async function ProvincePage({
     notFound();
   }
 
-  // Schema.org for this province page
+  const images = provinceImages[slug] || defaultImages;
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -121,36 +313,13 @@ export default async function ProvincePage({
       latitude: 8.4328,
       longitude: 99.9464,
     },
-    image: "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
+    image: images.installation[0],
     priceRange: "$$",
     sameAs: [
       "https://www.facebook.com/domekarnchang",
       "https://line.me/ti/p/@THZ",
     ],
   };
-
-  const products = [
-    {
-      title: "สนามเด็กเล่นพลาสติกกันแดด",
-      description: "สนามเด็กเล่นรวม โครงเหล็กชุบสังกะสี + พลาสติก LLDPE กันแดดกันฝน",
-      image: "/images/products/726606443_1405968788229183_6337553449482275185_n.jpg",
-    },
-    {
-      title: "สไลเดอร์พลาสติก",
-      description: "สไลเดอร์พลาสติก LLDPE คุณภาพสูง พร้อมบันไดปีน ปลอดภัยสำหรับเด็ก",
-      image: "/images/products/124374999_2742818269293265_2851804580300417570_n.jpg",
-    },
-    {
-      title: "ชิงช้าสนาม",
-      description: "ชิงช้าสนามโครงเหล็ก แข็งแรง ทนทาน เหมาะสำหรับโรงเรียน หมู่บ้าน",
-      image: "/images/products/472772789_3852975844944163_5782975775520749990_n.jpg",
-    },
-    {
-      title: "ม้านั่งโรงเรียน",
-      description: "ม้านั่งสนาม โครงเหล็กแข็งแรง ทนทาน ขนาดมาตรฐาน เหมาะสำหรับโรงเรียน",
-      image: "/images/products/650721761_1321150026711060_532668979833544120_n.jpg",
-    },
-  ];
 
   return (
     <main className="min-h-screen">
@@ -159,10 +328,13 @@ export default async function ProvincePage({
       {/* Hero */}
       <section className="pt-28 pb-16 bg-gradient-to-br from-primary via-primary-dark to-secondary relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-            backgroundSize: '30px 30px'
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+              backgroundSize: "30px 30px",
+            }}
+          />
         </div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -178,6 +350,108 @@ export default async function ProvincePage({
             <p className="thai-text text-sm text-white/60">
               จัดส่งฟรี บริการติดตั้งฟรี รับประกัน 5 ปี
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Installation Gallery - ผลงานที่ผ่านมา */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="inline-block thai-text bg-secondary/10 text-secondary px-5 py-2 rounded-full text-sm font-semibold mb-4">
+              ผลงานจริงที่ผ่านมา
+            </span>
+            <h2 className="font-montserrat text-3xl md:text-4xl font-extrabold text-text-dark mb-4">
+              ผลงานติดตั้งในจังหวัด{province.name}
+            </h2>
+            <p className="thai-text text-gray-500 max-w-2xl mx-auto">
+              ชมผลงานจริงจากลูกค้าทั่วจังหวัด{province.name} ที่ไว้วางใจให้ THZ ดูแล
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+            {images.installation.map((img, index) => (
+              <div
+                key={index}
+                className="gallery-card aspect-square cursor-pointer group"
+              >
+                <img
+                  src={img}
+                  alt={`ผลงานติดตั้ง ${province.name} โครงการที่ ${index + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div className="overlay flex items-end p-4">
+                  <div>
+                    <span className="inline-block bg-secondary/90 text-white text-xs font-bold px-3 py-1 rounded-full mb-2">
+                      ผลงานจริง
+                    </span>
+                    <h3 className="thai-text text-white font-semibold text-sm">
+                      ติดตั้งจังหวัด{province.name}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Stats */}
+          <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-3xl p-8 md:p-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {[
+                { number: "50+", label: `โครงการใน${province.name}`, color: "text-primary" },
+                { number: "100%", label: "ลูกค้าพอใจ", color: "text-secondary" },
+                { number: "5 ปี", label: "รับประกันสินค้า", color: "text-accent-dark" },
+                { number: "24 ชม.", label: "บริการลูกค้า", color: "text-[#06C755]" },
+              ].map((stat, index) => (
+                <div key={index}>
+                  <p className={`font-montserrat text-3xl md:text-4xl font-extrabold ${stat.color} mb-2`}>
+                    {stat.number}
+                  </p>
+                  <p className="thai-text text-sm text-gray-500">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-background-light">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="inline-block thai-text bg-primary/10 text-primary px-5 py-2 rounded-full text-sm font-semibold mb-4">
+              เสียงจากลูกค้า
+            </span>
+            <h2 className="font-montserrat text-3xl font-extrabold text-text-dark">
+              ลูกค้าของเราในจังหวัด{province.name}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} size={18} className="text-yellow-400 fill-yellow-400" />
+                  ))}
+                </div>
+                <p className="thai-text text-gray-600 mb-6 leading-relaxed">
+                  &ldquo;{testimonial.text}&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="text-primary font-bold">{testimonial.name.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <p className="font-montserrat font-bold text-text-dark">{testimonial.name}</p>
+                    <p className="thai-text text-xs text-gray-500">{testimonial.location}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -215,23 +489,18 @@ export default async function ProvincePage({
               <h3 className="font-montserrat text-xl font-bold text-text-dark mb-6">
                 สินค้าแนะนำสำหรับจังหวัด{province.name}
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                {products.map((product, index) => (
-                  <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 card-hover">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                {images.products.map((product, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 card-hover"
+                  >
                     <div className="aspect-[4/3] overflow-hidden">
                       <img
-                        src={product.image}
-                        alt={`${product.image} ${province.name}`}
-                        className="w-full h-full object-cover"
+                        src={product}
+                        alt={`สินค้า推荐 ${province.name}`}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                       />
-                    </div>
-                    <div className="p-5">
-                      <h4 className="font-montserrat font-bold text-text-dark mb-2">
-                        {product.title}
-                      </h4>
-                      <p className="thai-text text-sm text-gray-500">
-                        {product.description}
-                      </p>
                     </div>
                   </div>
                 ))}
@@ -271,6 +540,8 @@ export default async function ProvincePage({
                     { icon: Shield, text: "ได้มาตรฐาน มอก.3000", color: "text-primary" },
                     { icon: Truck, text: "จัดส่งฟรีทั่วจังหวัด", color: "text-secondary" },
                     { icon: Award, text: "รับประกัน 5 ปี", color: "text-accent-dark" },
+                    { icon: CheckCircle, text: "บริการติดตั้งฟรี", color: "text-[#06C755]" },
+                    { icon: Clock, text: "ตอบกลับภายใน 24 ชม.", color: "text-[#FF9800]" },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <item.icon size={18} className={item.color} />
@@ -336,7 +607,7 @@ export default async function ProvincePage({
                 <ul className="space-y-3">
                   <li>
                     <Link
-                      href="/products/thz-play"
+                      href="/products"
                       className="thai-text text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-2 group"
                     >
                       <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
@@ -346,7 +617,7 @@ export default async function ProvincePage({
                   </li>
                   <li>
                     <Link
-                      href="/products/thz-bench"
+                      href="/products"
                       className="thai-text text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-2 group"
                     >
                       <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
@@ -356,7 +627,7 @@ export default async function ProvincePage({
                   </li>
                   <li>
                     <Link
-                      href="/products/thz-furniture"
+                      href="/products"
                       className="thai-text text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-2 group"
                     >
                       <span className="w-1 h-1 rounded-full bg-primary/50 group-hover:bg-primary transition-colors" />
