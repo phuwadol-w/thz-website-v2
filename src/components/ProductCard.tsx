@@ -28,14 +28,25 @@ export default function ProductCard({
       whileHover={{ y: -8 }}
       className="group card-hover bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-gray-100"
     >
-      {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-white flex items-center justify-center p-4">
-        <Image
-          src={image}
-          alt={`${title} - อุปกรณ์สนามเด็กเล่น THZ`}
-          fill
-          className="object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
-        />
+      {/* Image or Placeholder */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+        {image ? (
+          <Image
+            src={image}
+            alt={`${title} - อุปกรณ์สนามเด็กเล่น THZ`}
+            fill
+            className="object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center text-gray-300">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span className="thai-text text-xs mt-2 text-gray-400">สินค้าตามสั่ง</span>
+          </div>
+        )}
         {/* Gradient overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-text-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
